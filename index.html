@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>APSRTC 52V/G Live Bus Tracker | Visakhapatnam</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.88);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+      width: 100%;
+      background: #0f172a;
+      z-index: 1;
+    }
+
+    /* Floating Glass Sidebar */
+    .sidebar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 380px;
+      max-height: calc(100vh - 32px);
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge-route {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      font-weight: 800;
+      font-size: 1.15rem;
+      padding: 6px 14px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+
+    .route-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: #34d399;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .btn-action {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-action.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .sidebar-content {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Bus Cards */
+    .bus-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bus-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(30, 58, 138, 0.25);
+    }
+
+    .bus-card.active-selected {
+      border-color: #3b82f6;
+      background: rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .bus-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .bus-plate {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bus-speed {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .bus-speed.halted {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .bus-detail-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .bus-detail-row i {
+      width: 14px;
+      color: #60a5fa;
+    }
+
+    .bus-detail-row strong {
+      color: var(--text);
+    }
+
+    /* ETA Alert Card */
+    .alert-setup {
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .alert-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .stop-select {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .footer-status {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    /* Mobile Drawer Toggle */
+    .mobile-toggle {
+      display: none;
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      z-index: 1001;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Leaflet Custom Markers */
+    .bus-marker {
+      background: transparent;
+      border: none;
+    }
+
+    .bus-pin {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      border: 2.5px solid white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .bus-pin i {
+      color: white;
+      font-size: 1.15rem;
+    }
+
+    .bus-pin-heading {
+      position: absolute;
+      top: -6px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 7px solid #60a5fa;
+    }
+
+    .bus-pin-label {
+      position: absolute;
+      bottom: -18px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e2e8f0;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stop-dot {
+      width: 10px;
+      height: 10px;
+      background: #f59e0b;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .terminal-dot {
+      width: 14px;
+      height: 14px;
+      background: #ef4444;
+      border: 2.5px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Modal for Timetable */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    }
+
+    .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 16px 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .schedule-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
+    }
+
+    .schedule-time {
+      font-weight: 700;
+      color: #60a5fa;
+      width: 60px;
+    }
+
+    .schedule-route {
+      flex: 1;
+      color: var(--text);
+      padding: 0 10px;
+    }
+
+    .schedule-duty {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: calc(100vw - 32px);
+        max-height: 60vh;
+        top: auto;
+        bottom: 16px;
+        transform: translateY(115%);
+      }
+
+      .sidebar.open {
+        transform: translateY(0);
+      }
+
+      .mobile-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Mobile Toggle Pill -->
+  <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bus"></i>
+    <span id="mobileToggleText">52V/G Live Info (<span id="mobileBusCount">0</span> buses)</span>
+  </button>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <span class="badge-route">
+          <i class="fa-solid fa-bus"></i> APSRTC 52V/G
+        </span>
+        <button class="btn-action" style="flex: none; padding: 6px 10px;" onclick="refreshData(true)" title="Manual Refresh">
+          <i class="fa-solid fa-rotate" id="refreshIcon"></i>
+        </button>
+      </div>
+      <div class="route-subtitle">
+        <strong>Gollala Endada ⇌ Town Kotharoad / OHPO</strong><br>
+        Via Sagar Nagar, Maddilapalem & Jagadamba
+      </div>
+      <div class="live-indicator">
+        <div class="pulse-dot"></div>
+        <span id="liveStatusText">Connecting to Live Feed...</span>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <button class="btn-action" onclick="locateUser()">
+        <i class="fa-solid fa-crosshairs"></i> Locate Me
+      </button>
+      <button class="btn-action" onclick="fitRoute()">
+        <i class="fa-solid fa-route"></i> Full Route
+      </button>
+      <button class="btn-action" onclick="openTimetable()">
+        <i class="fa-solid fa-clock"></i> Timetable
+      </button>
+    </div>
+
+    <div class="sidebar-content" id="sidebarContent">
+      <!-- Proximity Alarm Setup -->
+      <div class="alert-setup">
+        <div class="alert-title">
+          <i class="fa-solid fa-bell"></i> Stop Arrival Alert
+        </div>
+        <select class="stop-select" id="alertStopSelect" onchange="setupStopAlert()">
+          <option value="">Select your boarding/destination stop...</option>
+          <option value="243841">Gollala Endada</option>
+          <option value="243888">Sagarnagar</option>
+          <option value="226115">B V K College / Visalakshi Nagar</option>
+          <option value="226202">Venkojipalem</option>
+          <option value="8351">Maddilapalem</option>
+          <option value="232186">RTC Complex Vsp</option>
+          <option value="240929">Jagadamba</option>
+          <option value="1477289406496">Purna Market</option>
+          <option value="1676537881957">Town Kotharoad</option>
+          <option value="226175">Old Head Post Office</option>
+        </select>
+        <div id="alertMessage" style="font-size: 0.72rem; color: #34d399; margin-top: 6px; display: none;"></div>
+      </div>
+
+      <!-- Live Bus List -->
+      <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+        Active Buses on Route (<span id="busCountLabel">0</span>)
+      </div>
+
+      <div id="busList" style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0;">
+          <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i> Searching for 52V/G buses...
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-status">
+      <span>Auto-refresh: <strong id="refreshTimer">15s</strong></span>
+      <span>Depot: <strong>Maddilapalem (Vizag)</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- Timetable Modal -->
+<div class="modal-overlay" id="timetableModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">
+        <i class="fa-solid fa-calendar-days" style="color: #60a5fa; margin-right: 8px;"></i>
+        Route 52V/G Timetable (Daily)
+      </div>
+      <button class="btn-close" onclick="closeTimetable()">&times;</button>
+    </div>
+    <div class="modal-body" id="timetableList">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Audio for alert -->
+<audio id="alertAudio" preload="auto">
+  <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// --- Data & Constants ---
+const VP_FEED_URL = "https://maps.reclaim.city/apsrtc/rt/vehicle_positions.json";
+const TU_FEED_URL = "https://maps.reclaim.city/apsrtc/rt/trip_updates.json";
+const LOCAL_PROXY_URL = "/api/live"; // Fallback to local server if CORS blocks
+
+// Stops definition
+const STOPS = [
+  { id: "243841", name: "Gollala Endada", lat: 17.77629, lon: 83.36794, terminal: true },
+  { id: "243888", name: "Sagarnagar", lat: 17.76408, lon: 83.36105 },
+  { id: "226115", name: "B V K College", lat: 17.75526, lon: 83.34369 },
+  { id: "226202", name: "Venkojipalem", lat: 17.74623, lon: 83.32851 },
+  { id: "8351", name: "Maddilapalem", lat: 17.73607, lon: 83.32060 },
+  { id: "232186", name: "RTC Complex Vsp", lat: 17.72354, lon: 83.30751 },
+  { id: "240929", name: "Jagadamba", lat: 17.71079, lon: 83.30205 },
+  { id: "1477289406496", name: "Purna Market", lat: 17.70798, lon: 83.29731 },
+  { id: "1676537881957", name: "Town Kotharoad", lat: 17.70228, lon: 83.29459, terminal: true },
+  { id: "226175", name: "Old Head Post Office", lat: 17.67377, lon: 83.29213, terminal: true }
+];
+
+// Approximate path coordinates connecting the stops
+const ROUTE_SHAPE = [
+  [17.77629, 83.36794], [17.77484, 83.36561], [17.77093, 83.36371],
+  [17.76408, 83.36105], [17.75971, 83.35334], [17.75526, 83.34369],
+  [17.74952, 83.33418], [17.74623, 83.32851], [17.74088, 83.32398],
+  [17.73607, 83.32060], [17.73012, 83.31420], [17.72354, 83.30751],
+  [17.71650, 83.30450], [17.71079, 83.30205], [17.70798, 83.29731],
+  [17.70228, 83.29459]
+];
+
+// 36 Daily Trips for 52V/G (Duty A024 and H012)
+const TIMETABLE = [
+  { time: "05:00", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "H012-12" },
+  { time: "05:50", origin: "Old Head Post Office", dest: "Gollala Endada", duty: "H012-13" },
+  { time: "05:55", origin: "Maddilapalem", dest: "Gollala Endada", duty: "A024-01" },
+  { time: "06:20", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-02" },
+  { time: "06:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-14" },
+  { time: "07:05", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-03" },
+  { time: "07:40", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-15" },
+  { time: "08:05", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-04" },
+  { time: "08:40", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-16" },
+  { time: "08:55", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-05" },
+  { time: "09:30", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-17" },
+  { time: "09:55", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-06" },
+  { time: "10:20", origin: "Gollala Endada", dest: "Maddilapalem", duty: "H012-18" },
+  { time: "10:45", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-07" },
+  { time: "11:45", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-08" },
+  { time: "12:35", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-09" },
+  { time: "12:45", origin: "Maddilapalem", dest: "Gollala Endada", duty: "H012-01" },
+  { time: "13:15", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-02" },
+  { time: "13:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-10" },
+  { time: "14:10", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-03" },
+  { time: "14:45", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-11" },
+  { time: "15:10", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-04" },
+  { time: "15:45", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-12" },
+  { time: "16:00", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-05" },
+  { time: "16:35", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-13" },
+  { time: "17:00", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-06" },
+  { time: "17:35", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-14" },
+  { time: "17:50", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-07" },
+  { time: "18:25", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-15" },
+  { time: "18:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-08" },
+  { time: "19:10", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "A024-16" },
+  { time: "19:40", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-09" },
+  { time: "20:00", origin: "Old Head Post Office", dest: "Sagarnagar", duty: "A024-17" },
+  { time: "20:40", origin: "Sagarnagar", dest: "Maddilapalem", duty: "A024-18" },
+  { time: "20:40", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "H012-10" },
+  { time: "21:30", origin: "Old Head Post Office", dest: "Gollala Endada", duty: "H012-11" }
+];
+
+// --- Application State ---
+let map;
+let routeLine;
+let busMarkers = {};
+let stopMarkers = [];
+let userMarker = null;
+let activeBuses = [];
+let countdown = 15;
+let timerInterval = null;
+let selectedAlertStop = null;
+let hasAlertTriggered = false;
+
+// --- Initialize Map ---
+function initMap() {
+  map = L.map('map', {
+    zoomControl: false,
+    attributionControl: false
+  }).setView([17.73607, 83.32060], 13); // Centered on Maddilapalem
+
+  // Basemaps (100% Free & Open - Zero API Key Required)
+  const osmStandard = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+
+  const esriStreets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: 'Tiles &copy; Esri'
+  });
+
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: 'Tiles &copy; Esri'
+  });
+
+  // Default to OpenStreetMap (free, no watermark)
+  osmStandard.addTo(map);
+
+  // Layer Switcher Control
+  L.control.layers({
+    "OpenStreetMap (Free)": osmStandard,
+    "Street Map (Esri)": esriStreets,
+    "Satellite View": esriSatellite
+  }, null, { position: 'topright' }).addTo(map);
+
+  L.control.zoom({ position: 'topright' }).addTo(map);
+
+  // Draw Route Polyline
+  routeLine = L.polyline(ROUTE_SHAPE, {
+    color: '#2563eb',
+    weight: 5,
+    opacity: 0.85,
+    lineJoin: 'round',
+    dashArray: '1, 0'
+  }).addTo(map);
+
+  // Add Bus Stops
+  STOPS.forEach(stop => {
+    const isTerminal = stop.terminal;
+    const dotClass = isTerminal ? 'terminal-dot' : 'stop-dot';
+    const stopIcon = L.divIcon({
+      className: 'stop-marker',
+      html: `<div class="${dotClass}" title="${stop.name}"></div>`,
+      iconSize: [isTerminal ? 14 : 10, isTerminal ? 14 : 10],
+      iconAnchor: [isTerminal ? 7 : 5, isTerminal ? 7 : 5]
+    });
+
+    const marker = L.marker([stop.lat, stop.lon], { icon: stopIcon }).addTo(map);
+    marker.bindPopup(`
+      <div style="font-size:0.85rem; padding:4px;">
+        <strong style="color:#2563eb;">🚏 ${stop.name}</strong><br>
+        <span style="font-size:0.75rem; color:#64748b;">Stop ID: ${stop.id}</span>
+      </div>
+    `);
+    stopMarkers.push(marker);
+  });
+}
+
+// --- Live Bus Matching Function ---
+function is52VGBus(entity) {
+  const v = entity.vehicle || {};
+  const trip = v.trip || {};
+  const tripId = trip.tripId || "";
+  const routeId = trip.routeId || "";
+
+  if ((tripId.includes("A024") || tripId.includes("H012")) && tripId.includes("MADDILAPALEM")) {
+    return true;
+  }
+  if ([
+    "a024-gollala-endada-town-kotharoad",
+    "h012-gollala-endada-old-head-post-office",
+    "a024-old-head-post-office-sagarnagar",
+    "h012-gollala-endada-maddilapalem",
+    "a024-maddilapalem-sagarnagar"
+  ].includes(routeId)) {
+    return true;
+  }
+  return false;
+}
+
+// --- Haversine Distance (km) ---
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+// --- Nearest Stop Finder ---
+function getNearestStop(lat, lon) {
+  let minD = Infinity;
+  let nearest = null;
+  STOPS.forEach(s => {
+    const d = getDistanceKm(lat, lon, s.lat, s.lon);
+    if (d < minD) {
+      minD = d;
+      nearest = s;
+    }
+  });
+  return { stop: nearest, distance: minD };
+}
+
+// --- Fetch Live Positions & Trip Updates ---
+async function fetchLiveData() {
+  let vpData = null;
+  let tuData = null;
+
+  try {
+    // Attempt direct fetch (CORS is open on reclaim.city)
+    const [vpRes, tuRes] = await Promise.all([
+      fetch(VP_FEED_URL, { cache: "no-store" }),
+      fetch(TU_FEED_URL, { cache: "no-store" })
+    ]);
+    if (vpRes.ok && tuRes.ok) {
+      vpData = await vpRes.json();
+      tuData = await tuRes.json();
+    }
+  } catch (err) {
+    console.warn("Direct feed fetch failed, attempting local proxy fallback...", err);
+    try {
+      const fallbackRes = await fetch(LOCAL_PROXY_URL);
+      if (fallbackRes.ok) {
+        const fbJson = await fallbackRes.json();
+        vpData = fbJson.vehicle_positions;
+        tuData = fbJson.trip_updates;
+      }
+    } catch (e2) {
+      console.error("Local proxy also unreachable:", e2);
+    }
+  }
+
+  if (!vpData || !vpData.entity) {
+    document.getElementById("liveStatusText").textContent = "Unable to connect to live feed";
+    document.getElementById("liveStatusText").style.color = "#f87171";
+    return;
+  }
+
+  // Map trip updates
+  const tuMap = {};
+  if (tuData && tuData.entity) {
+    tuData.entity.forEach(e => {
+      const tu = e.tripUpdate;
+      if (tu && tu.trip && tu.trip.tripId) {
+        tuMap[tu.trip.tripId] = tu;
+      }
+    });
+  }
+
+  // Filter 52V/G buses
+  const matched = [];
+  vpData.entity.forEach(entity => {
+    if (is52VGBus(entity)) {
+      const v = entity.vehicle;
+      const trip = v.trip || {};
+      const pos = v.position || {};
+      const veh = v.vehicle || {};
+      const tripId = trip.tripId || "";
+
+      const lat = pos.latitude;
+      const lon = pos.longitude;
+      const speedKmh = Math.round((pos.speed || 0) * 3.6);
+      const bearing = pos.bearing || 0;
+      const plate = veh.licensePlate || veh.label || "AP-BUS";
+      const { stop: nearestStop, distance: stopDist } = getNearestStop(lat, lon);
+
+      // Predictions from trip updates
+      const tu = tuMap[tripId];
+      let etaStr = "Calculating...";
+      let delaySec = 0;
+      if (tu && tu.stopTimeUpdate && tu.stopTimeUpdate.length > 0) {
+        const nextStu = tu.stopTimeUpdate[0];
+        delaySec = nextStu.arrival ? nextStu.arrival.delay || 0 : 0;
+        if (nextStu.arrival && nextStu.arrival.time) {
+          const arrDate = new Date(parseInt(nextStu.arrival.time) * 1000);
+          etaStr = arrDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+      }
+
+      // Direction
+      let dir = "Towards Town Kotharoad";
+      if (tripId.includes("17_")) dir = "Towards Sagarnagar";
+      else if (trip.routeId && trip.routeId.includes("old-head-post-office")) dir = "Towards OHPO";
+      else if (tripId.includes("1_") || tripId.includes("3_") || tripId.includes("5_") || tripId.includes("7_") || tripId.includes("9_") || tripId.includes("11_") || tripId.includes("13_") || tripId.includes("15_")) {
+        dir = "Towards Gollala Endada";
+      }
+
+      matched.push({
+        id: entity.id || tripId,
+        plate: plate,
+        tripId: tripId,
+        routeId: trip.routeId || "",
+        lat: lat,
+        lon: lon,
+        speedKmh: speedKmh,
+        bearing: bearing,
+        nearestStop: nearestStop ? nearestStop.name : "En Route",
+        stopDistKm: stopDist.toFixed(2),
+        direction: dir,
+        eta: etaStr,
+        delaySec: delaySec,
+        timestamp: v.timestamp
+      });
+    }
+  });
+
+  activeBuses = matched;
+  renderBusesOnMap(matched);
+  renderBusCards(matched);
+  checkProximityAlerts(matched);
+
+  document.getElementById("liveStatusText").textContent = `Live Feed Active (${matched.length} on road)`;
+  document.getElementById("liveStatusText").style.color = "#34d399";
+  document.getElementById("busCountLabel").textContent = matched.length;
+  document.getElementById("mobileBusCount").textContent = matched.length;
+}
+
+// --- Render Bus Markers on Leaflet ---
+function renderBusesOnMap(buses) {
+  const currentIds = new Set(buses.map(b => b.id));
+
+  // Remove stale markers
+  Object.keys(busMarkers).forEach(id => {
+    if (!currentIds.has(id)) {
+      map.removeLayer(busMarkers[id]);
+      delete busMarkers[id];
+    }
+  });
+
+  buses.forEach(b => {
+    const isMoving = b.speedKmh > 0;
+    const pinColor = isMoving ? "#2563eb" : "#f59e0b";
+
+    const customIcon = L.divIcon({
+      className: 'bus-marker',
+      html: `
+        <div class="bus-pin" style="background:${pinColor};">
+          <div class="bus-pin-heading" style="transform: rotate(${b.bearing}deg); transform-origin: center bottom;"></div>
+          <i class="fa-solid fa-bus"></i>
+          <div class="bus-pin-label">${b.plate}</div>
+        </div>
+      `,
+      iconSize: [44, 44],
+      iconAnchor: [22, 22]
+    });
+
+    const popupHtml = `
+      <div style="font-family:'Plus Jakarta Sans',sans-serif; min-width:180px; padding:2px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <strong style="color:#2563eb; font-size:1rem;">🚌 ${b.plate}</strong>
+          <span style="font-size:0.75rem; background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:10px; font-weight:700;">
+            ${b.speedKmh} km/h
+          </span>
+        </div>
+        <div style="font-size:0.8rem; color:#475569; line-height:1.5;">
+          <strong>Direction:</strong> ${b.direction}<br>
+          <strong>Nearest:</strong> ${b.nearestStop} (~${b.stopDistKm} km)<br>
+          <strong>Trip ID:</strong> ${b.tripId}<br>
+          <strong>ETA Next Stop:</strong> ${b.eta}
+        </div>
+      </div>
+    `;
+
+    if (busMarkers[b.id]) {
+      // Smooth update existing marker
+      busMarkers[b.id].setLatLng([b.lat, b.lon]);
+      busMarkers[b.id].setIcon(customIcon);
+      busMarkers[b.id].getPopup().setContent(popupHtml);
+    } else {
+      // Create new marker
+      const marker = L.marker([b.lat, b.lon], { icon: customIcon }).addTo(map);
+      marker.bindPopup(popupHtml);
+      busMarkers[b.id] = marker;
+    }
+  });
+}
+
+// --- Render Sidebar Cards ---
+function renderBusCards(buses) {
+  const container = document.getElementById("busList");
+  if (!buses || buses.length === 0) {
+    container.innerHTML = `
+      <div style="background:rgba(15,23,42,0.4); border:1px dashed var(--border); border-radius:12px; padding:20px; text-align:center;">
+        <i class="fa-solid fa-moon" style="font-size:1.8rem; color:#94a3b8; margin-bottom:10px;"></i>
+        <div style="font-weight:700; font-size:0.9rem; color:#f8fafc;">No 52V/G buses on road right now</div>
+        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">
+          Buses operate daily from 05:00 AM to 10:30 PM. Click Timetable above to view scheduled departures.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = buses.map(b => `
+    <div class="bus-card" onclick="focusBus('${b.id}', ${b.lat}, ${b.lon})">
+      <div class="bus-card-header">
+        <div class="bus-plate">
+          <i class="fa-solid fa-bus-simple"></i> ${b.plate}
+        </div>
+        <div class="bus-speed ${b.speedKmh === 0 ? 'halted' : ''}">
+          <i class="fa-solid ${b.speedKmh === 0 ? 'fa-pause' : 'fa-gauge-high'}"></i>
+          ${b.speedKmh > 0 ? b.speedKmh + ' km/h' : 'Halted'}
+        </div>
+      </div>
+      <div class="bus-detail-row">
+        <i class="fa-solid fa-arrows-turn-to-dots"></i>
+        <span>${b.direction}</span>
+      </div>
+      <div class="bus-detail-row">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Near <strong>${b.nearestStop}</strong> (~${b.stopDistKm} km)</span>
+      </div>
+      <div class="bus-detail-row">
+        <i class="fa-solid fa-clock"></i>
+        <span>${b.eta !== 'Calculating...' ? 'Arrival: <strong>' + b.eta + '</strong>' : 'Next Stop ETA: Estimating...'}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+// --- Focus Bus on Map ---
+function focusBus(id, lat, lon) {
+  map.flyTo([lat, lon], 16, { animate: true, duration: 1.2 });
+  if (busMarkers[id]) {
+    setTimeout(() => busMarkers[id].openPopup(), 1200);
+  }
+}
+
+// --- Proximity Alert Logic ---
+function setupStopAlert() {
+  const select = document.getElementById("alertStopSelect");
+  const stopId = select.value;
+  const msgEl = document.getElementById("alertMessage");
+
+  if (!stopId) {
+    selectedAlertStop = null;
+    msgEl.style.display = "none";
+    return;
+  }
+
+  const stop = STOPS.find(s => s.id === stopId);
+  if (stop) {
+    selectedAlertStop = stop;
+    hasAlertTriggered = false;
+    msgEl.style.display = "block";
+    msgEl.innerHTML = `<i class="fa-solid fa-check"></i> Alert armed for <strong>${stop.name}</strong>!`;
+
+    // Request browser notification permission if available
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }
+}
+
+function checkProximityAlerts(buses) {
+  if (!selectedAlertStop || hasAlertTriggered) return;
+
+  buses.forEach(b => {
+    const dist = getDistanceKm(b.lat, b.lon, selectedAlertStop.lat, selectedAlertStop.lon);
+    // If bus is within 1.2 km of chosen stop
+    if (dist <= 1.2) {
+      hasAlertTriggered = true;
+      triggerAlert(b, selectedAlertStop, dist);
+    }
+  });
+}
+
+function triggerAlert(bus, stop, dist) {
+  const audio = document.getElementById("alertAudio");
+  if (audio) {
+    audio.play().catch(e => console.log("Audio autoplay prevented"));
+  }
+
+  const alertText = `🚨 Bus ${bus.plate} is ~${dist.toFixed(1)} km from ${stop.name}!`;
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification("APSRTC 52V/G Approaching!", {
+      body: alertText,
+      icon: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png"
+    });
+  }
+
+  alert(alertText);
+}
+
+// --- Locate User ---
+function locateUser() {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    if (userMarker) {
+      userMarker.setLatLng([lat, lon]);
+    } else {
+      const userIcon = L.divIcon({
+        className: 'user-marker',
+        html: `<div style="width:16px;height:16px;background:#10b981;border:3px solid white;border-radius:50%;box-shadow:0 0 10px #10b981;"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      });
+      userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+      userMarker.bindPopup("<strong>You are here</strong>").openPopup();
+    }
+
+    map.flyTo([lat, lon], 15);
+  }, err => {
+    alert("Unable to retrieve your location: " + err.message);
+  });
+}
+
+// --- Fit Full Route ---
+function fitRoute() {
+  if (routeLine) {
+    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+  }
+}
+
+// --- Timetable Modal ---
+function openTimetable() {
+  const container = document.getElementById("timetableList");
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  container.innerHTML = TIMETABLE.map(t => {
+    const [h, m] = t.time.split(":").map(Number);
+    const tripMinutes = h * 60 + m;
+    const isPast = tripMinutes < currentMinutes - 45;
+    const isNearNow = Math.abs(tripMinutes - currentMinutes) <= 30;
+
+    return `
+      <div class="schedule-item" style="${isNearNow ? 'background:rgba(37,99,235,0.15); border-radius:8px; padding:10px 8px;' : ''}">
+        <div class="schedule-time" style="${isNearNow ? 'color:#34d399;' : ''}">${t.time}</div>
+        <div class="schedule-route">
+          <strong>${t.origin}</strong> → ${t.dest}
+          ${isNearNow ? '<span style="font-size:0.68rem; background:#10b981; color:white; padding:2px 6px; border-radius:10px; margin-left:6px;">Current / Active</span>' : ''}
+        </div>
+        <div class="schedule-duty">${t.duty}</div>
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("timetableModal").classList.add("open");
+}
+
+function closeTimetable() {
+  document.getElementById("timetableModal").classList.remove("open");
+}
+
+// --- Toggle Sidebar for Mobile ---
+function toggleSidebar() {
+  const sb = document.getElementById("sidebar");
+  sb.classList.toggle("open");
+}
+
+// --- Refresh Routine ---
+function refreshData(manual = false) {
+  const icon = document.getElementById("refreshIcon");
+  if (manual && icon) {
+    icon.classList.add("fa-spin");
+    setTimeout(() => icon.classList.remove("fa-spin"), 1000);
+  }
+  countdown = 15;
+  fetchLiveData();
+}
+
+// --- Timer Loop ---
+function startAutoRefresh() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    countdown--;
+    if (countdown <= 0) {
+      refreshData();
+    }
+    const timerEl = document.getElementById("refreshTimer");
+    if (timerEl) timerEl.textContent = `${countdown}s`;
+  }, 1000);
+}
+
+// --- Initialize App ---
+window.addEventListener("DOMContentLoaded", () => {
+  initMap();
+  fetchLiveData();
+  startAutoRefresh();
+});
+</script>
+
+</body>
+</html>

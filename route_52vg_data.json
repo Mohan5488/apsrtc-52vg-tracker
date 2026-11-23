@@ -1,0 +1,1130 @@
+{
+  "route_name": "52V/G",
+  "route_full_name": "Gollala Endada \u21cc Town Kotharoad / Old Head Post Office (via Sagar Nagar)",
+  "city": "Visakhapatnam (Vizag)",
+  "depot": "MADDILAPALEM",
+  "duty_codes": [
+    "A024",
+    "H012"
+  ],
+  "route_ids": [
+    "a024-gollala-endada-town-kotharoad",
+    "h012-gollala-endada-old-head-post-office",
+    "a024-old-head-post-office-sagarnagar",
+    "h012-gollala-endada-maddilapalem",
+    "a024-maddilapalem-sagarnagar"
+  ],
+  "feed_urls": {
+    "vehicle_positions": "https://maps.reclaim.city/apsrtc/rt/vehicle_positions.json",
+    "trip_updates": "https://maps.reclaim.city/apsrtc/rt/trip_updates.json",
+    "status": "https://maps.reclaim.city/apsrtc/rt/status.json"
+  },
+  "shapes": {
+    "s5718": [
+      [
+        17.77613,
+        83.36789
+      ],
+      [
+        17.77613,
+        83.36606
+      ],
+      [
+        17.77484,
+        83.36561
+      ],
+      [
+        17.77435,
+        83.36477
+      ],
+      [
+        17.77368,
+        83.36573
+      ],
+      [
+        17.77266,
+        83.36564
+      ],
+      [
+        17.77058,
+        83.3636
+      ],
+      [
+        17.76791,
+        83.36421
+      ],
+      [
+        17.76667,
+        83.36534
+      ],
+      [
+        17.76416,
+        83.36101
+      ],
+      [
+        17.76342,
+        83.35956
+      ],
+      [
+        17.76081,
+        83.3575
+      ],
+      [
+        17.7613,
+        83.35582
+      ],
+      [
+        17.76021,
+        83.35464
+      ],
+      [
+        17.75994,
+        83.3526
+      ],
+      [
+        17.75907,
+        83.35207
+      ],
+      [
+        17.75807,
+        83.35366
+      ],
+      [
+        17.75608,
+        83.35366
+      ],
+      [
+        17.75468,
+        83.35151
+      ],
+      [
+        17.75382,
+        83.35091
+      ],
+      [
+        17.75488,
+        83.34704
+      ],
+      [
+        17.75529,
+        83.3437
+      ],
+      [
+        17.75791,
+        83.33342
+      ],
+      [
+        17.7538,
+        83.33241
+      ],
+      [
+        17.74828,
+        83.33175
+      ],
+      [
+        17.74723,
+        83.33082
+      ],
+      [
+        17.74672,
+        83.32886
+      ],
+      [
+        17.74283,
+        83.3279
+      ],
+      [
+        17.74623,
+        83.32849
+      ],
+      [
+        17.74692,
+        83.32885
+      ],
+      [
+        17.74755,
+        83.33127
+      ],
+      [
+        17.74654,
+        83.32875
+      ],
+      [
+        17.74074,
+        83.32743
+      ],
+      [
+        17.73858,
+        83.32392
+      ],
+      [
+        17.73514,
+        83.3197
+      ],
+      [
+        17.73588,
+        83.32077
+      ],
+      [
+        17.73833,
+        83.32357
+      ],
+      [
+        17.73077,
+        83.31594
+      ],
+      [
+        17.72802,
+        83.31197
+      ],
+      [
+        17.72443,
+        83.30865
+      ],
+      [
+        17.72462,
+        83.30618
+      ],
+      [
+        17.72382,
+        83.30536
+      ],
+      [
+        17.72316,
+        83.30746
+      ],
+      [
+        17.72314,
+        83.30796
+      ],
+      [
+        17.72464,
+        83.30874
+      ],
+      [
+        17.72205,
+        83.30772
+      ],
+      [
+        17.71628,
+        83.30445
+      ],
+      [
+        17.71233,
+        83.30316
+      ],
+      [
+        17.71174,
+        83.3024
+      ],
+      [
+        17.71086,
+        83.30208
+      ],
+      [
+        17.70652,
+        83.2985
+      ],
+      [
+        17.70777,
+        83.29715
+      ],
+      [
+        17.70797,
+        83.29733
+      ],
+      [
+        17.70652,
+        83.2985
+      ],
+      [
+        17.69903,
+        83.29525
+      ],
+      [
+        17.69956,
+        83.29407
+      ],
+      [
+        17.70017,
+        83.29363
+      ],
+      [
+        17.70228,
+        83.29458
+      ]
+    ],
+    "s5719": [
+      [
+        17.70228,
+        83.29458
+      ],
+      [
+        17.70797,
+        83.29733
+      ],
+      [
+        17.71078,
+        83.29922
+      ],
+      [
+        17.70969,
+        83.30122
+      ],
+      [
+        17.71102,
+        83.30187
+      ],
+      [
+        17.71086,
+        83.30208
+      ],
+      [
+        17.71096,
+        83.30184
+      ],
+      [
+        17.71244,
+        83.30292
+      ],
+      [
+        17.71691,
+        83.30474
+      ],
+      [
+        17.72296,
+        83.3079
+      ],
+      [
+        17.72383,
+        83.30509
+      ],
+      [
+        17.72316,
+        83.30746
+      ],
+      [
+        17.72314,
+        83.30796
+      ],
+      [
+        17.72465,
+        83.30854
+      ],
+      [
+        17.72816,
+        83.31182
+      ],
+      [
+        17.73063,
+        83.31551
+      ],
+      [
+        17.73439,
+        83.31932
+      ],
+      [
+        17.73523,
+        83.31969
+      ],
+      [
+        17.73588,
+        83.32077
+      ],
+      [
+        17.73857,
+        83.3237
+      ],
+      [
+        17.74068,
+        83.32725
+      ],
+      [
+        17.74623,
+        83.32849
+      ],
+      [
+        17.74692,
+        83.32885
+      ],
+      [
+        17.74729,
+        83.33064
+      ],
+      [
+        17.74831,
+        83.33163
+      ],
+      [
+        17.7554,
+        83.33262
+      ],
+      [
+        17.75501,
+        83.33424
+      ],
+      [
+        17.75499,
+        83.33777
+      ],
+      [
+        17.75375,
+        83.34168
+      ],
+      [
+        17.75378,
+        83.34204
+      ],
+      [
+        17.75552,
+        83.34258
+      ],
+      [
+        17.75529,
+        83.3437
+      ],
+      [
+        17.75488,
+        83.34704
+      ],
+      [
+        17.75384,
+        83.35084
+      ],
+      [
+        17.75473,
+        83.35147
+      ],
+      [
+        17.75612,
+        83.35359
+      ],
+      [
+        17.75804,
+        83.35358
+      ],
+      [
+        17.75904,
+        83.35198
+      ],
+      [
+        17.76007,
+        83.35263
+      ],
+      [
+        17.76028,
+        83.3546
+      ],
+      [
+        17.76138,
+        83.35581
+      ],
+      [
+        17.76089,
+        83.35744
+      ],
+      [
+        17.76336,
+        83.35937
+      ],
+      [
+        17.76416,
+        83.36101
+      ],
+      [
+        17.76342,
+        83.35956
+      ],
+      [
+        17.76081,
+        83.3575
+      ],
+      [
+        17.7613,
+        83.35597
+      ],
+      [
+        17.76089,
+        83.35744
+      ],
+      [
+        17.76356,
+        83.3596
+      ],
+      [
+        17.76744,
+        83.36696
+      ],
+      [
+        17.76924,
+        83.36842
+      ],
+      [
+        17.76971,
+        83.37016
+      ],
+      [
+        17.77001,
+        83.37039
+      ],
+      [
+        17.77134,
+        83.36845
+      ],
+      [
+        17.7725,
+        83.36898
+      ],
+      [
+        17.77288,
+        83.36819
+      ],
+      [
+        17.77375,
+        83.36854
+      ],
+      [
+        17.7742,
+        83.3675
+      ],
+      [
+        17.77613,
+        83.36789
+      ]
+    ],
+    "s5721": [
+      [
+        17.67377,
+        83.29213
+      ],
+      [
+        17.70798,
+        83.29731
+      ],
+      [
+        17.71078,
+        83.29922
+      ],
+      [
+        17.70969,
+        83.30122
+      ],
+      [
+        17.71102,
+        83.30187
+      ],
+      [
+        17.71086,
+        83.30208
+      ],
+      [
+        17.71096,
+        83.30184
+      ],
+      [
+        17.71244,
+        83.30292
+      ],
+      [
+        17.71691,
+        83.30474
+      ],
+      [
+        17.72296,
+        83.3079
+      ],
+      [
+        17.72383,
+        83.30509
+      ],
+      [
+        17.72316,
+        83.30746
+      ],
+      [
+        17.72314,
+        83.30796
+      ],
+      [
+        17.72465,
+        83.30854
+      ],
+      [
+        17.72816,
+        83.31182
+      ],
+      [
+        17.73063,
+        83.31551
+      ],
+      [
+        17.73439,
+        83.31932
+      ],
+      [
+        17.73523,
+        83.31969
+      ],
+      [
+        17.73588,
+        83.32077
+      ],
+      [
+        17.73857,
+        83.3237
+      ],
+      [
+        17.74068,
+        83.32725
+      ],
+      [
+        17.74623,
+        83.32849
+      ],
+      [
+        17.74692,
+        83.32885
+      ],
+      [
+        17.74729,
+        83.33064
+      ],
+      [
+        17.74831,
+        83.33163
+      ],
+      [
+        17.7554,
+        83.33262
+      ],
+      [
+        17.75501,
+        83.33424
+      ],
+      [
+        17.75499,
+        83.33777
+      ],
+      [
+        17.75375,
+        83.34168
+      ],
+      [
+        17.75378,
+        83.34204
+      ],
+      [
+        17.75552,
+        83.34258
+      ],
+      [
+        17.75529,
+        83.3437
+      ],
+      [
+        17.75488,
+        83.34704
+      ],
+      [
+        17.75384,
+        83.35084
+      ],
+      [
+        17.75473,
+        83.35147
+      ],
+      [
+        17.75612,
+        83.35359
+      ],
+      [
+        17.75804,
+        83.35358
+      ],
+      [
+        17.75904,
+        83.35198
+      ],
+      [
+        17.76007,
+        83.35263
+      ],
+      [
+        17.76028,
+        83.3546
+      ],
+      [
+        17.76138,
+        83.35581
+      ],
+      [
+        17.76089,
+        83.35744
+      ],
+      [
+        17.76336,
+        83.35937
+      ],
+      [
+        17.76416,
+        83.36101
+      ]
+    ]
+  },
+  "stops_forward": [
+    {
+      "id": "243841",
+      "name": "Gollala Endada",
+      "lat": 17.77629,
+      "lon": 83.36794,
+      "scheduled_time": "06:20"
+    },
+    {
+      "id": "243888",
+      "name": "Sagarnagar",
+      "lat": 17.76408,
+      "lon": 83.36105,
+      "scheduled_time": "06:30"
+    },
+    {
+      "id": "226115",
+      "name": "B V K College",
+      "lat": 17.75526,
+      "lon": 83.34369,
+      "scheduled_time": "06:35"
+    },
+    {
+      "id": "226202",
+      "name": "Venkojipalem",
+      "lat": 17.74623,
+      "lon": 83.32851,
+      "scheduled_time": "06:40"
+    },
+    {
+      "id": "8351",
+      "name": "Maddilapalem",
+      "lat": 17.73607,
+      "lon": 83.3206,
+      "scheduled_time": "06:45"
+    },
+    {
+      "id": "232186",
+      "name": "Rtc Complex Vsp",
+      "lat": 17.72354,
+      "lon": 83.30751,
+      "scheduled_time": "06:50"
+    },
+    {
+      "id": "240929",
+      "name": "Jagadamba",
+      "lat": 17.71079,
+      "lon": 83.30205,
+      "scheduled_time": "06:55"
+    },
+    {
+      "id": "1477289406496",
+      "name": "Purnamarket-Vsp",
+      "lat": 17.70798,
+      "lon": 83.29731,
+      "scheduled_time": "07:00"
+    },
+    {
+      "id": "1676537881957",
+      "name": "Town Kotharoad",
+      "lat": 17.70228,
+      "lon": 83.29459,
+      "scheduled_time": "07:05"
+    }
+  ],
+  "stops_backward": [
+    {
+      "id": "1676537881957",
+      "name": "Town Kotharoad",
+      "lat": 17.70228,
+      "lon": 83.29459,
+      "scheduled_time": "07:05"
+    },
+    {
+      "id": "1477289406496",
+      "name": "Purnamarket-Vsp",
+      "lat": 17.70798,
+      "lon": 83.29731,
+      "scheduled_time": "07:10"
+    },
+    {
+      "id": "240929",
+      "name": "Jagadamba",
+      "lat": 17.71079,
+      "lon": 83.30205,
+      "scheduled_time": "07:15"
+    },
+    {
+      "id": "232186",
+      "name": "Rtc Complex Vsp",
+      "lat": 17.72354,
+      "lon": 83.30751,
+      "scheduled_time": "07:20"
+    },
+    {
+      "id": "8351",
+      "name": "Maddilapalem",
+      "lat": 17.73607,
+      "lon": 83.3206,
+      "scheduled_time": "07:25"
+    },
+    {
+      "id": "226202",
+      "name": "Venkojipalem",
+      "lat": 17.74623,
+      "lon": 83.32851,
+      "scheduled_time": "07:30"
+    },
+    {
+      "id": "226115",
+      "name": "B V K College",
+      "lat": 17.75526,
+      "lon": 83.34369,
+      "scheduled_time": "07:35"
+    },
+    {
+      "id": "243888",
+      "name": "Sagarnagar",
+      "lat": 17.76408,
+      "lon": 83.36105,
+      "scheduled_time": "07:40"
+    },
+    {
+      "id": "243841",
+      "name": "Gollala Endada",
+      "lat": 17.77629,
+      "lon": 83.36794,
+      "scheduled_time": "07:50"
+    }
+  ],
+  "daily_trips": [
+    {
+      "trip_id": "A024_10_MADDILAPALEM",
+      "code": "A024-10",
+      "depot": "MADDILAPALEM",
+      "start_time": "13:50",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_11_MADDILAPALEM",
+      "code": "A024-11",
+      "depot": "MADDILAPALEM",
+      "start_time": "14:45",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_12_MADDILAPALEM",
+      "code": "A024-12",
+      "depot": "MADDILAPALEM",
+      "start_time": "15:45",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_13_MADDILAPALEM",
+      "code": "A024-13",
+      "depot": "MADDILAPALEM",
+      "start_time": "16:35",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_14_MADDILAPALEM",
+      "code": "A024-14",
+      "depot": "MADDILAPALEM",
+      "start_time": "17:35",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_15_MADDILAPALEM",
+      "code": "A024-15",
+      "depot": "MADDILAPALEM",
+      "start_time": "18:25",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_16_MADDILAPALEM",
+      "code": "A024-16",
+      "depot": "MADDILAPALEM",
+      "start_time": "19:10",
+      "origin": "GOLLALA ENDADA",
+      "destination": "OLD HEAD POST OFFICE",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_17_MADDILAPALEM",
+      "code": "A024-17",
+      "depot": "MADDILAPALEM",
+      "start_time": "20:00",
+      "origin": "OLD HEAD POST OFFICE",
+      "destination": "SAGARNAGAR",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_18_MADDILAPALEM",
+      "code": "A024-18",
+      "depot": "MADDILAPALEM",
+      "start_time": "20:40",
+      "origin": "SAGARNAGAR",
+      "destination": "MADDILAPALEM",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_1_MADDILAPALEM",
+      "code": "A024-01",
+      "depot": "MADDILAPALEM",
+      "start_time": "05:55",
+      "origin": "MADDILAPALEM",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_2_MADDILAPALEM",
+      "code": "A024-02",
+      "depot": "MADDILAPALEM",
+      "start_time": "06:20",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_3_MADDILAPALEM",
+      "code": "A024-03",
+      "depot": "MADDILAPALEM",
+      "start_time": "07:05",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_4_MADDILAPALEM",
+      "code": "A024-04",
+      "depot": "MADDILAPALEM",
+      "start_time": "08:05",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_5_MADDILAPALEM",
+      "code": "A024-05",
+      "depot": "MADDILAPALEM",
+      "start_time": "08:55",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_6_MADDILAPALEM",
+      "code": "A024-06",
+      "depot": "MADDILAPALEM",
+      "start_time": "09:55",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_7_MADDILAPALEM",
+      "code": "A024-07",
+      "depot": "MADDILAPALEM",
+      "start_time": "10:45",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_8_MADDILAPALEM",
+      "code": "A024-08",
+      "depot": "MADDILAPALEM",
+      "start_time": "11:45",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "A024_9_MADDILAPALEM",
+      "code": "A024-09",
+      "depot": "MADDILAPALEM",
+      "start_time": "12:35",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "A024"
+    },
+    {
+      "trip_id": "H012_10_MADDILAPALEM",
+      "code": "H012-10",
+      "depot": "MADDILAPALEM",
+      "start_time": "20:40",
+      "origin": "GOLLALA ENDADA",
+      "destination": "OLD HEAD POST OFFICE",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_11_MADDILAPALEM",
+      "code": "H012-11",
+      "depot": "MADDILAPALEM",
+      "start_time": "21:30",
+      "origin": "OLD HEAD POST OFFICE",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_12_MADDILAPALEM",
+      "code": "H012-12",
+      "depot": "MADDILAPALEM",
+      "start_time": "05:00",
+      "origin": "GOLLALA ENDADA",
+      "destination": "OLD HEAD POST OFFICE",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_13_MADDILAPALEM",
+      "code": "H012-13",
+      "depot": "MADDILAPALEM",
+      "start_time": "05:50",
+      "origin": "OLD HEAD POST OFFICE",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_14_MADDILAPALEM",
+      "code": "H012-14",
+      "depot": "MADDILAPALEM",
+      "start_time": "06:50",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_15_MADDILAPALEM",
+      "code": "H012-15",
+      "depot": "MADDILAPALEM",
+      "start_time": "07:40",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_16_MADDILAPALEM",
+      "code": "H012-16",
+      "depot": "MADDILAPALEM",
+      "start_time": "08:40",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_17_MADDILAPALEM",
+      "code": "H012-17",
+      "depot": "MADDILAPALEM",
+      "start_time": "09:30",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_18_MADDILAPALEM",
+      "code": "H012-18",
+      "depot": "MADDILAPALEM",
+      "start_time": "10:20",
+      "origin": "GOLLALA ENDADA",
+      "destination": "MADDILAPALEM",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_1_MADDILAPALEM",
+      "code": "H012-01",
+      "depot": "MADDILAPALEM",
+      "start_time": "12:45",
+      "origin": "MADDILAPALEM",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_2_MADDILAPALEM",
+      "code": "H012-02",
+      "depot": "MADDILAPALEM",
+      "start_time": "13:15",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_3_MADDILAPALEM",
+      "code": "H012-03",
+      "depot": "MADDILAPALEM",
+      "start_time": "14:10",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_4_MADDILAPALEM",
+      "code": "H012-04",
+      "depot": "MADDILAPALEM",
+      "start_time": "15:10",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_5_MADDILAPALEM",
+      "code": "H012-05",
+      "depot": "MADDILAPALEM",
+      "start_time": "16:00",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_6_MADDILAPALEM",
+      "code": "H012-06",
+      "depot": "MADDILAPALEM",
+      "start_time": "17:00",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_7_MADDILAPALEM",
+      "code": "H012-07",
+      "depot": "MADDILAPALEM",
+      "start_time": "17:50",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_8_MADDILAPALEM",
+      "code": "H012-08",
+      "depot": "MADDILAPALEM",
+      "start_time": "18:50",
+      "origin": "GOLLALA ENDADA",
+      "destination": "TOWN KOTHAROAD",
+      "duty": "H012"
+    },
+    {
+      "trip_id": "H012_9_MADDILAPALEM",
+      "code": "H012-09",
+      "depot": "MADDILAPALEM",
+      "start_time": "19:40",
+      "origin": "TOWN KOTHAROAD",
+      "destination": "GOLLALA ENDADA",
+      "duty": "H012"
+    }
+  ]
+}
