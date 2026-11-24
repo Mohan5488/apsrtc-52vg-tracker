@@ -279,7 +279,7 @@ def main():
     parser = argparse.ArgumentParser(description="Live Tracker for APSRTC Route 52V/G")
     parser.add_argument("--once", action="store_true", help="Print live positions once and exit")
     parser.add_argument("--demo", action="store_true", help="Run with simulated demo buses")
-    parser.add_argument("--interval", type=int, default=15, help="Refresh interval in seconds (default: 15)")
+    parser.add_argument("--interval", type=int, default=10, help="Refresh interval in seconds (default: 10)")
     args = parser.parse_args()
 
     while True:

@@ -1001,7 +1001,7 @@
 
     <!-- Footer -->
     <div class="footer-status">
-      <span>Auto-refresh: <strong id="refreshTimer">15s</strong></span>
+      <span>Auto-refresh: <strong id="refreshTimer">10s</strong></span>
       <span>Depot: <strong>Maddilapalem (Vizag)</strong></span>
     </div>
   </div>
@@ -1111,7 +1111,7 @@ let forwardBuses = [];
 let backwardBuses = [];
 
 let isDemoMode = false;
-let countdown = 15;
+let countdown = 10;
 let timerInterval = null;
 let selectedAlertStop = null;
 let hasAlertTriggered = false;
@@ -2018,7 +2018,7 @@ function refreshData(manual = false) {
     icon.classList.add("fa-spin");
     setTimeout(() => icon.classList.remove("fa-spin"), 1000);
   }
-  countdown = 15;
+  countdown = 10;
   fetchLiveData();
 }
 
