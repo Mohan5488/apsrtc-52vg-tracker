@@ -4,13 +4,13 @@ A lightweight, dedicated real-time bus tracking application for Visakhapatnam (V
 
 ---
 
-## 🗺️ Route Overview
+## 🗺️ Route Directions & Corridor Details
 
-- **Route Number**: `52V` / `52V/G` (Vizag City Ordinary)
-- **Depot**: `Maddilapalem` (Visakhapatnam)
-- **APSRTC Duty Rosters**: `A024` and `H012`
-- **Total Daily Scheduled Trips**: 36 trips/day (05:00 AM – 10:30 PM)
-- **Main Stops Along Corridor**:
+The tracker provides **2 dedicated Route Tabs** for both directions of travel:
+
+### 1. ➡️ Route 1 [FROM ➔ TO]: Gollala Endada ➔ Town Kotharoad
+- **Total Stops**: 9 Stops (~16.2 km, ~45 min travel time)
+- **Stops in sequence**:
   1. 🚏 **Gollala Endada** (Terminal - Stop ID `243841`)
   2. 🚏 **Sagarnagar** (Stop ID `243888`)
   3. 🚏 **B V K College / Visalakshi Nagar** (Stop ID `226115`)
@@ -20,7 +20,34 @@ A lightweight, dedicated real-time bus tracking application for Visakhapatnam (V
   7. 🚏 **Jagadamba Centre** (Stop ID `240929`)
   8. 🚏 **Purna Market** (Stop ID `1477289406496`)
   9. 🚏 **Town Kotharoad** (Terminal - Stop ID `1676537881957`)
-  10. 🚏 **Old Head Post Office (OHPO)** (Extended Terminal - Stop ID `226175`)
+
+### 2. ⬅️ Route 2 [TO ➔ FROM]: Town Kotharoad ➔ Gollala Endada
+- **Total Stops**: 9 Stops (~16.2 km, ~45 min travel time)
+- **Stops in sequence**:
+  1. 🚏 **Town Kotharoad** (Terminal - Stop ID `1676537881957`)
+  2. 🚏 **Purna Market** (Stop ID `1477289406496`)
+  3. 🚏 **Jagadamba Centre** (Stop ID `240929`)
+  4. 🚏 **RTC Complex Vsp** (Central Bus Station - Stop ID `232186`)
+  5. 🚏 **Maddilapalem** (Depot / Transit Hub - Stop ID `8351`)
+  6. 🚏 **Venkojipalem** (Stop ID `226202`)
+  7. 🚏 **B V K College / Visalakshi Nagar** (Stop ID `226115`)
+  8. 🚏 **Sagarnagar** (Stop ID `243888`)
+  9. 🚏 **Gollala Endada** (Terminal - Stop ID `243841`)
+
+---
+
+## ✨ Features Added
+
+- **2 Route Direction Tabs**: Switch between **From ➔ To** (*Gollala Endada ➔ Town Kotharoad*) and **To ➔ From** (*Town Kotharoad ➔ Gollala Endada*).
+- **Available Buses per Direction**: Filter and view live buses traveling along each route leg.
+- **Stops Count & Interactive Progression**: Displays total stops (9 stops), with a collapsible timeline showing stop names, order, and live bus positions.
+- **Where the Bus Currently Is**:
+  - Exact nearest stop (e.g. `📍 Currently near: RTC Complex Vsp (~0.4 km away)`)
+  - Stop progress: `Stop 6 of 9 • Next: Jagadamba • 3 stops remaining`
+  - Visual Step Progress bar with a floating bus icon between origin and destination.
+  - Live speed in km/h (`Moving` or `Halted at Stop`), GPS bearing, and next stop ETA.
+- **Interactive Leaflet Map**: Dynamic route highlights (`s5718` for forward, `s5719` for return) and directionally numbered stop markers (1-9).
+- **Demo / Preview Mode**: Integrated toggle in the header to instantly preview live bus tracking with realistic recorded GPS positions anytime.
 
 ---
 

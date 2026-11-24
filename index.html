@@ -17,11 +17,13 @@
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
+      --forward-color: #3b82f6;
+      --backward-color: #a855f7;
       --accent: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
       --bg: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.88);
+      --card-bg: rgba(30, 41, 59, 0.90);
       --border: rgba(255, 255, 255, 0.1);
       --text: #f8fafc;
       --text-muted: #94a3b8;
@@ -63,22 +65,22 @@
       position: absolute;
       top: 16px;
       left: 16px;
-      width: 380px;
+      width: 410px;
       max-height: calc(100vh - 32px);
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--border);
       border-radius: 20px;
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .sidebar-header {
-      padding: 20px;
+      padding: 16px 20px 14px 20px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -89,25 +91,18 @@
       background: linear-gradient(135deg, #2563eb, #3b82f6);
       color: white;
       font-weight: 800;
-      font-size: 1.15rem;
-      padding: 6px 14px;
+      font-size: 1.1rem;
+      padding: 5px 12px;
       border-radius: 12px;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-    }
-
-    .route-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 8px;
-      line-height: 1.4;
     }
 
     .live-indicator {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: #34d399;
       font-weight: 600;
       margin-top: 8px;
@@ -123,42 +118,166 @@
     }
 
     @keyframes pulse {
-      0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-      }
-      70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-      }
-      100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-      }
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
+    /* 2 Routes Tabs Container */
+    .route-tabs-wrap {
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.55);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tabs-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+    }
+
+    .route-tabs {
+      display: flex;
+      gap: 10px;
+    }
+
+    .route-tab {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      color: var(--text);
+    }
+
+    .route-tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .route-tab.active.forward-tab {
+      background: linear-gradient(145deg, rgba(37, 99, 235, 0.28), rgba(30, 58, 138, 0.45));
+      border-color: #3b82f6;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+    }
+
+    .route-tab.active.backward-tab {
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.28), rgba(88, 28, 135, 0.45));
+      border-color: #a855f7;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+    }
+
+    .route-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      width: 70%;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .route-tab.active.forward-tab::after {
+      background: #3b82f6;
+    }
+
+    .route-tab.active.backward-tab::after {
+      background: #a855f7;
+    }
+
+    .tab-direction-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-bottom: 5px;
+    }
+
+    .tab-direction-pill.forward {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .tab-direction-pill.backward {
+      background: rgba(168, 85, 247, 0.2);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+
+    .tab-route-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #f8fafc;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tab-route-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tab-bus-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 700;
+      font-size: 0.72rem;
+    }
+
+    .tab-bus-count.available {
+      color: #34d399;
+    }
+
+    .tab-bus-count.none {
+      color: var(--text-muted);
+    }
+
+    /* Quick action buttons */
     .quick-actions {
       display: flex;
-      gap: 8px;
-      padding: 12px 20px;
+      gap: 6px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.35);
     }
 
     .btn-action {
       flex: 1;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 0.78rem;
+      padding: 7px 10px;
+      border-radius: 9px;
+      font-size: 0.74rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s;
     }
 
@@ -167,25 +286,202 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .btn-action.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
+    .btn-action.demo-active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #34d399;
     }
 
     .sidebar-content {
-      padding: 16px 20px;
+      padding: 14px 16px;
       overflow-y: auto;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
+    }
+
+    /* Route Summary & Stops Drawer */
+    .route-info-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .route-info-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .route-info-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .route-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .route-stat-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 6px 4px;
+      text-align: center;
+    }
+
+    .route-stat-val {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .route-stat-lbl {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-top: 1px;
+    }
+
+    /* Stops Progression Accordion */
+    .btn-toggle-stops {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed var(--border);
+      color: #93c5fd;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .btn-toggle-stops:hover {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: #3b82f6;
+    }
+
+    .stops-timeline-container {
+      display: none;
+      margin-top: 10px;
+      padding: 4px 0 4px 8px;
+    }
+
+    .stops-timeline-container.open {
+      display: block;
+    }
+
+    .stop-timeline-list {
+      position: relative;
+      padding-left: 20px;
+      border-left: 2px solid rgba(59, 130, 246, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-left: 6px;
+    }
+
+    .stop-timeline-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .stop-timeline-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .stop-timeline-node {
+      position: absolute;
+      left: -26px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 800;
+      color: #93c5fd;
+    }
+
+    .stop-timeline-item.terminal .stop-timeline-node {
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    .stop-timeline-item.has-bus {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .stop-timeline-item.has-bus .stop-timeline-node {
+      border-color: #10b981;
+      background: #10b981;
+      color: white;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+    }
+
+    .stop-bus-tag {
+      background: #10b981;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      animation: pulse-sm 1.6s infinite;
+    }
+
+    @keyframes pulse-sm {
+      0% { transform: scale(0.98); }
+      50% { transform: scale(1.04); }
+      100% { transform: scale(0.98); }
+    }
+
+    /* Section Headers */
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     /* Bus Cards */
     .bus-card {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid var(--border);
       border-radius: 14px;
       padding: 14px;
       transition: all 0.25s ease;
@@ -196,14 +492,15 @@
 
     .bus-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(59, 130, 246, 0.5);
-      background: rgba(30, 58, 138, 0.25);
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(30, 58, 138, 0.22);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .bus-card.active-selected {
       border-color: #3b82f6;
-      background: rgba(37, 99, 235, 0.15);
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+      background: rgba(37, 99, 235, 0.16);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
     }
 
     .bus-card-header {
@@ -214,8 +511,8 @@
     }
 
     .bus-plate {
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1.05rem;
+      font-weight: 800;
       color: #93c5fd;
       display: flex;
       align-items: center;
@@ -223,13 +520,16 @@
     }
 
     .bus-speed {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 20px;
       background: rgba(16, 185, 129, 0.2);
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .bus-speed.halted {
@@ -238,11 +538,83 @@
       border-color: rgba(245, 158, 11, 0.4);
     }
 
+    /* Current Location Box */
+    .bus-current-location {
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin: 8px 0;
+    }
+
+    .bus-current-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .bus-current-sub {
+      font-size: 0.71rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Visual Transit Progress Bar */
+    .bus-progress-wrap {
+      margin: 10px 0 6px 0;
+    }
+
+    .bus-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.67rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .bus-progress-bar-bg {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .bus-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .bus-progress-pin {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      background: #10b981;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 7px;
+    }
+
     .bus-detail-row {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       margin-top: 4px;
     }
@@ -258,20 +630,20 @@
 
     /* ETA Alert Card */
     .alert-setup {
-      background: rgba(37, 99, 235, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 14px;
-      padding: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 10px 12px;
     }
 
     .alert-title {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: #60a5fa;
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .stop-select {
@@ -279,21 +651,21 @@
       background: #0f172a;
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 8px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       outline: none;
     }
 
     .footer-status {
-      padding: 12px 20px;
+      padding: 10px 16px;
       border-top: 1px solid var(--border);
       font-size: 0.72rem;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.45);
     }
 
     /* Mobile Drawer Toggle */
@@ -304,7 +676,7 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
       border: 1px solid var(--border);
       color: white;
       padding: 10px 20px;
@@ -312,7 +684,7 @@
       font-size: 0.85rem;
       font-weight: 700;
       z-index: 1001;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
       cursor: pointer;
       gap: 8px;
       align-items: center;
@@ -339,6 +711,10 @@
       position: relative;
     }
 
+    .bus-pin.backward-pin {
+      background: #7c3aed;
+    }
+
     .bus-pin i {
       color: white;
       font-size: 1.15rem;
@@ -346,18 +722,18 @@
 
     .bus-pin-heading {
       position: absolute;
-      top: -6px;
+      top: -7px;
       width: 0;
       height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
-      border-bottom: 7px solid #60a5fa;
+      border-bottom: 8px solid #60a5fa;
     }
 
     .bus-pin-label {
       position: absolute;
       bottom: -18px;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       color: #e2e8f0;
       font-size: 9px;
       font-weight: 800;
@@ -393,7 +769,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(8px);
       z-index: 2000;
       align-items: center;
@@ -410,11 +786,11 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.65);
     }
 
     .modal-header {
@@ -435,7 +811,7 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
     }
 
@@ -474,11 +850,10 @@
       border-radius: 4px;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .sidebar {
         width: calc(100vw - 32px);
-        max-height: 60vh;
+        max-height: 65vh;
         top: auto;
         bottom: 16px;
         transform: translateY(115%);
@@ -503,76 +878,150 @@
   <!-- Mobile Toggle Pill -->
   <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
     <i class="fa-solid fa-bus"></i>
-    <span id="mobileToggleText">52V/G Live Info (<span id="mobileBusCount">0</span> buses)</span>
+    <span id="mobileToggleText">52V/G Live (<span id="mobileBusCount">0</span> available)</span>
   </button>
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
+    <!-- Header -->
     <div class="sidebar-header">
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <span class="badge-route">
           <i class="fa-solid fa-bus"></i> APSRTC 52V/G
         </span>
-        <button class="btn-action" style="flex: none; padding: 6px 10px;" onclick="refreshData(true)" title="Manual Refresh">
-          <i class="fa-solid fa-rotate" id="refreshIcon"></i>
-        </button>
-      </div>
-      <div class="route-subtitle">
-        <strong>Gollala Endada ⇌ Town Kotharoad / OHPO</strong><br>
-        Via Sagar Nagar, Maddilapalem & Jagadamba
+        <div style="display: flex; gap: 6px;">
+          <button class="btn-action" style="flex: none; padding: 5px 8px;" id="btnDemoMode" onclick="toggleDemoMode()" title="Toggle Sample Live Buses">
+            <i class="fa-solid fa-flask"></i> <span id="demoBtnText" style="font-size:0.7rem;">Demo</span>
+          </button>
+          <button class="btn-action" style="flex: none; padding: 5px 9px;" onclick="refreshData(true)" title="Manual Refresh">
+            <i class="fa-solid fa-rotate" id="refreshIcon"></i>
+          </button>
+        </div>
       </div>
       <div class="live-indicator">
         <div class="pulse-dot"></div>
-        <span id="liveStatusText">Connecting to Live Feed...</span>
+        <span id="liveStatusText">Connecting to live feed...</span>
       </div>
     </div>
 
+    <!-- 2 Route Tabs: From -> To and To -> From -->
+    <div class="route-tabs-wrap">
+      <div class="tabs-label-row">
+        <span>Select Corridor Direction:</span>
+        <span id="totalActiveLabel">0 buses live</span>
+      </div>
+      <div class="route-tabs">
+        <!-- Tab 1: From -> To (Gollala Endada -> Town Kotharoad) -->
+        <button class="route-tab active forward-tab" id="tabForward" onclick="switchRouteTab('forward')">
+          <div class="tab-direction-pill forward">
+            <i class="fa-solid fa-arrow-right"></i> From → To
+          </div>
+          <div class="tab-route-title" title="Gollala Endada ➔ Town Kotharoad">Gollala Endada ➔ Town Kotharoad</div>
+          <div class="tab-route-meta">
+            <span>9 Stops • 16 km</span>
+            <span class="tab-bus-count" id="forwardCountPill"><i class="fa-solid fa-bus"></i> <span id="forwardBusBadge">0</span></span>
+          </div>
+        </button>
+
+        <!-- Tab 2: To -> From (Town Kotharoad -> Gollala Endada) -->
+        <button class="route-tab backward-tab" id="tabBackward" onclick="switchRouteTab('backward')">
+          <div class="tab-direction-pill backward">
+            <i class="fa-solid fa-arrow-left"></i> To → From
+          </div>
+          <div class="tab-route-title" title="Town Kotharoad ➔ Gollala Endada">Town Kotharoad ➔ Gollala Endada</div>
+          <div class="tab-route-meta">
+            <span>9 Stops • 16 km</span>
+            <span class="tab-bus-count" id="backwardCountPill"><i class="fa-solid fa-bus"></i> <span id="backwardBusBadge">0</span></span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick action buttons -->
     <div class="quick-actions">
       <button class="btn-action" onclick="locateUser()">
         <i class="fa-solid fa-crosshairs"></i> Locate Me
       </button>
       <button class="btn-action" onclick="fitRoute()">
-        <i class="fa-solid fa-route"></i> Full Route
+        <i class="fa-solid fa-route"></i> Fit Route
       </button>
       <button class="btn-action" onclick="openTimetable()">
         <i class="fa-solid fa-clock"></i> Timetable
       </button>
     </div>
 
+    <!-- Sidebar Scrollable Body -->
     <div class="sidebar-content" id="sidebarContent">
+      
+      <!-- Route Direction Details & Stops Drawer -->
+      <div class="route-info-card">
+        <div class="route-info-title">
+          <span id="routeCardTitle">Gollala Endada ➔ Town Kotharoad</span>
+          <span style="font-size:0.75rem; color:#60a5fa;" id="routeCardDirBadge">Forward</span>
+        </div>
+        <div class="route-info-sub" id="routeCardSub">
+          Via Sagar Nagar, Maddilapalem & Jagadamba Centre
+        </div>
+
+        <!-- 4 Stat Boxes -->
+        <div class="route-stats-grid">
+          <div class="route-stat-box">
+            <div class="route-stat-val" id="statStopsCount">9</div>
+            <div class="route-stat-lbl">Stops</div>
+          </div>
+          <div class="route-stat-box">
+            <div class="route-stat-val" style="color:#34d399;" id="statBusesAvail">0</div>
+            <div class="route-stat-lbl">Available</div>
+          </div>
+          <div class="route-stat-box">
+            <div class="route-stat-val">16.2</div>
+            <div class="route-stat-lbl">Km</div>
+          </div>
+          <div class="route-stat-box">
+            <div class="route-stat-val">~45</div>
+            <div class="route-stat-lbl">Mins</div>
+          </div>
+        </div>
+
+        <!-- Collapsible Stops Progression List -->
+        <button class="btn-toggle-stops" onclick="toggleStopsTimeline()">
+          <span><i class="fa-solid fa-list-ol" style="margin-right:6px;"></i> View 9 Stops Progression</span>
+          <i class="fa-solid fa-chevron-down" id="stopsChevron"></i>
+        </button>
+
+        <div class="stops-timeline-container" id="stopsTimelineContainer">
+          <div class="stop-timeline-list" id="stopTimelineList">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+
       <!-- Proximity Alarm Setup -->
       <div class="alert-setup">
         <div class="alert-title">
           <i class="fa-solid fa-bell"></i> Stop Arrival Alert
         </div>
         <select class="stop-select" id="alertStopSelect" onchange="setupStopAlert()">
-          <option value="">Select your boarding/destination stop...</option>
-          <option value="243841">Gollala Endada</option>
-          <option value="243888">Sagarnagar</option>
-          <option value="226115">B V K College / Visalakshi Nagar</option>
-          <option value="226202">Venkojipalem</option>
-          <option value="8351">Maddilapalem</option>
-          <option value="232186">RTC Complex Vsp</option>
-          <option value="240929">Jagadamba</option>
-          <option value="1477289406496">Purna Market</option>
-          <option value="1676537881957">Town Kotharoad</option>
-          <option value="226175">Old Head Post Office</option>
+          <option value="">Select stop to get arrival sound alert...</option>
         </select>
         <div id="alertMessage" style="font-size: 0.72rem; color: #34d399; margin-top: 6px; display: none;"></div>
       </div>
 
-      <!-- Live Bus List -->
-      <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-        Active Buses on Route (<span id="busCountLabel">0</span>)
+      <!-- Live Bus List Header -->
+      <div class="section-header-row">
+        <span>Available Buses on this Route (<span id="busCountLabel">0</span>)</span>
+        <span style="font-size:0.7rem; color:#60a5fa;" id="currentRouteFilterText">From → To</span>
       </div>
 
+      <!-- Bus Cards Container -->
       <div id="busList" style="display: flex; flex-direction: column; gap: 10px;">
         <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0;">
-          <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i> Searching for 52V/G buses...
+          <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i> Searching for buses...
         </div>
       </div>
     </div>
 
+    <!-- Footer -->
     <div class="footer-status">
       <span>Auto-refresh: <strong id="refreshTimer">15s</strong></span>
       <span>Depot: <strong>Maddilapalem (Vizag)</strong></span>
@@ -586,7 +1035,7 @@
     <div class="modal-header">
       <div class="modal-title">
         <i class="fa-solid fa-calendar-days" style="color: #60a5fa; margin-right: 8px;"></i>
-        Route 52V/G Timetable (Daily)
+        Route 52V/G Daily Scheduled Departures (36 Trips)
       </div>
       <button class="btn-close" onclick="closeTimetable()">&times;</button>
     </div>
@@ -605,154 +1054,196 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-// --- Data & Constants ---
+// --- GTFS Data & Road Shapes ---
+const SHAPE_FORWARD = [[17.77613, 83.36789], [17.77613, 83.36606], [17.77484, 83.36561], [17.77435, 83.36477], [17.77368, 83.36573], [17.77266, 83.36564], [17.77058, 83.3636], [17.76791, 83.36421], [17.76667, 83.36534], [17.76416, 83.36101], [17.76342, 83.35956], [17.76081, 83.3575], [17.7613, 83.35582], [17.76021, 83.35464], [17.75994, 83.3526], [17.75907, 83.35207], [17.75807, 83.35366], [17.75608, 83.35366], [17.75468, 83.35151], [17.75382, 83.35091], [17.75488, 83.34704], [17.75529, 83.3437], [17.75791, 83.33342], [17.7538, 83.33241], [17.74828, 83.33175], [17.74723, 83.33082], [17.74672, 83.32886], [17.74283, 83.3279], [17.74623, 83.32849], [17.74692, 83.32885], [17.74755, 83.33127], [17.74654, 83.32875], [17.74074, 83.32743], [17.73858, 83.32392], [17.73514, 83.3197], [17.73588, 83.32077], [17.73833, 83.32357], [17.73077, 83.31594], [17.72802, 83.31197], [17.72443, 83.30865], [17.72462, 83.30618], [17.72382, 83.30536], [17.72316, 83.30746], [17.72314, 83.30796], [17.72464, 83.30874], [17.72205, 83.30772], [17.71628, 83.30445], [17.71233, 83.30316], [17.71174, 83.3024], [17.71086, 83.30208], [17.70652, 83.2985], [17.70777, 83.29715], [17.70797, 83.29733], [17.70652, 83.2985], [17.69903, 83.29525], [17.69956, 83.29407], [17.70017, 83.29363], [17.70228, 83.29458]];
+const SHAPE_BACKWARD = [[17.70228, 83.29458], [17.70797, 83.29733], [17.71078, 83.29922], [17.70969, 83.30122], [17.71102, 83.30187], [17.71086, 83.30208], [17.71096, 83.30184], [17.71244, 83.30292], [17.71691, 83.30474], [17.72296, 83.3079], [17.72383, 83.30509], [17.72316, 83.30746], [17.72314, 83.30796], [17.72465, 83.30854], [17.72816, 83.31182], [17.73063, 83.31551], [17.73439, 83.31932], [17.73523, 83.31969], [17.73588, 83.32077], [17.73857, 83.3237], [17.74068, 83.32725], [17.74623, 83.32849], [17.74692, 83.32885], [17.74729, 83.33064], [17.74831, 83.33163], [17.7554, 83.33262], [17.75501, 83.33424], [17.75499, 83.33777], [17.75375, 83.34168], [17.75378, 83.34204], [17.75552, 83.34258], [17.75529, 83.3437], [17.75488, 83.34704], [17.75384, 83.35084], [17.75473, 83.35147], [17.75612, 83.35359], [17.75804, 83.35358], [17.75904, 83.35198], [17.76007, 83.35263], [17.76028, 83.3546], [17.76138, 83.35581], [17.76089, 83.35744], [17.76336, 83.35937], [17.76416, 83.36101], [17.76342, 83.35956], [17.76081, 83.3575], [17.7613, 83.35597], [17.76089, 83.35744], [17.76356, 83.3596], [17.76744, 83.36696], [17.76924, 83.36842], [17.76971, 83.37016], [17.77001, 83.37039], [17.77134, 83.36845], [17.7725, 83.36898], [17.77288, 83.36819], [17.77375, 83.36854], [17.7742, 83.3675], [17.77613, 83.36789]];
+
+const STOPS_FORWARD = [{"id": "243841", "name": "Gollala Endada", "lat": 17.77629, "lon": 83.36794, "scheduled_time": "06:20"}, {"id": "243888", "name": "Sagarnagar", "lat": 17.76408, "lon": 83.36105, "scheduled_time": "06:30"}, {"id": "226115", "name": "B V K College", "lat": 17.75526, "lon": 83.34369, "scheduled_time": "06:35"}, {"id": "226202", "name": "Venkojipalem", "lat": 17.74623, "lon": 83.32851, "scheduled_time": "06:40"}, {"id": "8351", "name": "Maddilapalem", "lat": 17.73607, "lon": 83.3206, "scheduled_time": "06:45"}, {"id": "232186", "name": "Rtc Complex Vsp", "lat": 17.72354, "lon": 83.30751, "scheduled_time": "06:50"}, {"id": "240929", "name": "Jagadamba", "lat": 17.71079, "lon": 83.30205, "scheduled_time": "06:55"}, {"id": "1477289406496", "name": "Purnamarket-Vsp", "lat": 17.70798, "lon": 83.29731, "scheduled_time": "07:00"}, {"id": "1676537881957", "name": "Town Kotharoad", "lat": 17.70228, "lon": 83.29459, "scheduled_time": "07:05"}];
+const STOPS_BACKWARD = [{"id": "1676537881957", "name": "Town Kotharoad", "lat": 17.70228, "lon": 83.29459, "scheduled_time": "07:05"}, {"id": "1477289406496", "name": "Purnamarket-Vsp", "lat": 17.70798, "lon": 83.29731, "scheduled_time": "07:10"}, {"id": "240929", "name": "Jagadamba", "lat": 17.71079, "lon": 83.30205, "scheduled_time": "07:15"}, {"id": "232186", "name": "Rtc Complex Vsp", "lat": 17.72354, "lon": 83.30751, "scheduled_time": "07:20"}, {"id": "8351", "name": "Maddilapalem", "lat": 17.73607, "lon": 83.3206, "scheduled_time": "07:25"}, {"id": "226202", "name": "Venkojipalem", "lat": 17.74623, "lon": 83.32851, "scheduled_time": "07:30"}, {"id": "226115", "name": "B V K College", "lat": 17.75526, "lon": 83.34369, "scheduled_time": "07:35"}, {"id": "243888", "name": "Sagarnagar", "lat": 17.76408, "lon": 83.36105, "scheduled_time": "07:40"}, {"id": "243841", "name": "Gollala Endada", "lat": 17.77629, "lon": 83.36794, "scheduled_time": "07:50"}];
+
+const TRIP_METADATA = {"A024_10_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-10", "time": "13:50"}, "A024_11_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-11", "time": "14:45"}, "A024_12_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-12", "time": "15:45"}, "A024_13_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-13", "time": "16:35"}, "A024_14_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-14", "time": "17:35"}, "A024_15_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-15", "time": "18:25"}, "A024_16_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "OLD HEAD POST OFFICE", "direction": "forward", "duty": "A024-16", "time": "19:10"}, "A024_17_MADDILAPALEM": {"origin": "OLD HEAD POST OFFICE", "dest": "SAGARNAGAR", "direction": "backward", "duty": "A024-17", "time": "20:00"}, "A024_18_MADDILAPALEM": {"origin": "SAGARNAGAR", "dest": "MADDILAPALEM", "direction": "forward", "duty": "A024-18", "time": "20:40"}, "A024_1_MADDILAPALEM": {"origin": "MADDILAPALEM", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-01", "time": "05:55"}, "A024_2_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-02", "time": "06:20"}, "A024_3_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-03", "time": "07:05"}, "A024_4_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-04", "time": "08:05"}, "A024_5_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-05", "time": "08:55"}, "A024_6_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-06", "time": "09:55"}, "A024_7_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-07", "time": "10:45"}, "A024_8_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "A024-08", "time": "11:45"}, "A024_9_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "A024-09", "time": "12:35"}, "H012_10_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "OLD HEAD POST OFFICE", "direction": "forward", "duty": "H012-10", "time": "20:40"}, "H012_11_MADDILAPALEM": {"origin": "OLD HEAD POST OFFICE", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-11", "time": "21:30"}, "H012_12_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "OLD HEAD POST OFFICE", "direction": "forward", "duty": "H012-12", "time": "05:00"}, "H012_13_MADDILAPALEM": {"origin": "OLD HEAD POST OFFICE", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-13", "time": "05:50"}, "H012_14_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-14", "time": "06:50"}, "H012_15_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-15", "time": "07:40"}, "H012_16_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-16", "time": "08:40"}, "H012_17_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-17", "time": "09:30"}, "H012_18_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "MADDILAPALEM", "direction": "forward", "duty": "H012-18", "time": "10:20"}, "H012_1_MADDILAPALEM": {"origin": "MADDILAPALEM", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-01", "time": "12:45"}, "H012_2_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-02", "time": "13:15"}, "H012_3_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-03", "time": "14:10"}, "H012_4_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-04", "time": "15:10"}, "H012_5_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-05", "time": "16:00"}, "H012_6_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-06", "time": "17:00"}, "H012_7_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-07", "time": "17:50"}, "H012_8_MADDILAPALEM": {"origin": "GOLLALA ENDADA", "dest": "TOWN KOTHAROAD", "direction": "forward", "duty": "H012-08", "time": "18:50"}, "H012_9_MADDILAPALEM": {"origin": "TOWN KOTHAROAD", "dest": "GOLLALA ENDADA", "direction": "backward", "duty": "H012-09", "time": "19:40"}};
+
+// Reclaim Chennai live feeds
 const VP_FEED_URL = "https://maps.reclaim.city/apsrtc/rt/vehicle_positions.json";
 const TU_FEED_URL = "https://maps.reclaim.city/apsrtc/rt/trip_updates.json";
-const LOCAL_PROXY_URL = "/api/live"; // Fallback to local server if CORS blocks
+const LOCAL_PROXY_URL = "/api/live";
 
-// Stops definition
-const STOPS = [
-  { id: "243841", name: "Gollala Endada", lat: 17.77629, lon: 83.36794, terminal: true },
-  { id: "243888", name: "Sagarnagar", lat: 17.76408, lon: 83.36105 },
-  { id: "226115", name: "B V K College", lat: 17.75526, lon: 83.34369 },
-  { id: "226202", name: "Venkojipalem", lat: 17.74623, lon: 83.32851 },
-  { id: "8351", name: "Maddilapalem", lat: 17.73607, lon: 83.32060 },
-  { id: "232186", name: "RTC Complex Vsp", lat: 17.72354, lon: 83.30751 },
-  { id: "240929", name: "Jagadamba", lat: 17.71079, lon: 83.30205 },
-  { id: "1477289406496", name: "Purna Market", lat: 17.70798, lon: 83.29731 },
-  { id: "1676537881957", name: "Town Kotharoad", lat: 17.70228, lon: 83.29459, terminal: true },
-  { id: "226175", name: "Old Head Post Office", lat: 17.67377, lon: 83.29213, terminal: true }
+// Full Timetable (36 Daily Trips)
+const TIMETABLE = [{"trip_id": "A024_10_MADDILAPALEM", "code": "A024-10", "depot": "MADDILAPALEM", "start_time": "13:50", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_11_MADDILAPALEM", "code": "A024-11", "depot": "MADDILAPALEM", "start_time": "14:45", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_12_MADDILAPALEM", "code": "A024-12", "depot": "MADDILAPALEM", "start_time": "15:45", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_13_MADDILAPALEM", "code": "A024-13", "depot": "MADDILAPALEM", "start_time": "16:35", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_14_MADDILAPALEM", "code": "A024-14", "depot": "MADDILAPALEM", "start_time": "17:35", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_15_MADDILAPALEM", "code": "A024-15", "depot": "MADDILAPALEM", "start_time": "18:25", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_16_MADDILAPALEM", "code": "A024-16", "depot": "MADDILAPALEM", "start_time": "19:10", "origin": "GOLLALA ENDADA", "destination": "OLD HEAD POST OFFICE", "duty": "A024"}, {"trip_id": "A024_17_MADDILAPALEM", "code": "A024-17", "depot": "MADDILAPALEM", "start_time": "20:00", "origin": "OLD HEAD POST OFFICE", "destination": "SAGARNAGAR", "duty": "A024"}, {"trip_id": "A024_18_MADDILAPALEM", "code": "A024-18", "depot": "MADDILAPALEM", "start_time": "20:40", "origin": "SAGARNAGAR", "destination": "MADDILAPALEM", "duty": "A024"}, {"trip_id": "A024_1_MADDILAPALEM", "code": "A024-01", "depot": "MADDILAPALEM", "start_time": "05:55", "origin": "MADDILAPALEM", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_2_MADDILAPALEM", "code": "A024-02", "depot": "MADDILAPALEM", "start_time": "06:20", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_3_MADDILAPALEM", "code": "A024-03", "depot": "MADDILAPALEM", "start_time": "07:05", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_4_MADDILAPALEM", "code": "A024-04", "depot": "MADDILAPALEM", "start_time": "08:05", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_5_MADDILAPALEM", "code": "A024-05", "depot": "MADDILAPALEM", "start_time": "08:55", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_6_MADDILAPALEM", "code": "A024-06", "depot": "MADDILAPALEM", "start_time": "09:55", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_7_MADDILAPALEM", "code": "A024-07", "depot": "MADDILAPALEM", "start_time": "10:45", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "A024_8_MADDILAPALEM", "code": "A024-08", "depot": "MADDILAPALEM", "start_time": "11:45", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "A024"}, {"trip_id": "A024_9_MADDILAPALEM", "code": "A024-09", "depot": "MADDILAPALEM", "start_time": "12:35", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "A024"}, {"trip_id": "H012_10_MADDILAPALEM", "code": "H012-10", "depot": "MADDILAPALEM", "start_time": "20:40", "origin": "GOLLALA ENDADA", "destination": "OLD HEAD POST OFFICE", "duty": "H012"}, {"trip_id": "H012_11_MADDILAPALEM", "code": "H012-11", "depot": "MADDILAPALEM", "start_time": "21:30", "origin": "OLD HEAD POST OFFICE", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_12_MADDILAPALEM", "code": "H012-12", "depot": "MADDILAPALEM", "start_time": "05:00", "origin": "GOLLALA ENDADA", "destination": "OLD HEAD POST OFFICE", "duty": "H012"}, {"trip_id": "H012_13_MADDILAPALEM", "code": "H012-13", "depot": "MADDILAPALEM", "start_time": "05:50", "origin": "OLD HEAD POST OFFICE", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_14_MADDILAPALEM", "code": "H012-14", "depot": "MADDILAPALEM", "start_time": "06:50", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_15_MADDILAPALEM", "code": "H012-15", "depot": "MADDILAPALEM", "start_time": "07:40", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_16_MADDILAPALEM", "code": "H012-16", "depot": "MADDILAPALEM", "start_time": "08:40", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_17_MADDILAPALEM", "code": "H012-17", "depot": "MADDILAPALEM", "start_time": "09:30", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_18_MADDILAPALEM", "code": "H012-18", "depot": "MADDILAPALEM", "start_time": "10:20", "origin": "GOLLALA ENDADA", "destination": "MADDILAPALEM", "duty": "H012"}, {"trip_id": "H012_1_MADDILAPALEM", "code": "H012-01", "depot": "MADDILAPALEM", "start_time": "12:45", "origin": "MADDILAPALEM", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_2_MADDILAPALEM", "code": "H012-02", "depot": "MADDILAPALEM", "start_time": "13:15", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_3_MADDILAPALEM", "code": "H012-03", "depot": "MADDILAPALEM", "start_time": "14:10", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_4_MADDILAPALEM", "code": "H012-04", "depot": "MADDILAPALEM", "start_time": "15:10", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_5_MADDILAPALEM", "code": "H012-05", "depot": "MADDILAPALEM", "start_time": "16:00", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_6_MADDILAPALEM", "code": "H012-06", "depot": "MADDILAPALEM", "start_time": "17:00", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_7_MADDILAPALEM", "code": "H012-07", "depot": "MADDILAPALEM", "start_time": "17:50", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}, {"trip_id": "H012_8_MADDILAPALEM", "code": "H012-08", "depot": "MADDILAPALEM", "start_time": "18:50", "origin": "GOLLALA ENDADA", "destination": "TOWN KOTHAROAD", "duty": "H012"}, {"trip_id": "H012_9_MADDILAPALEM", "code": "H012-09", "depot": "MADDILAPALEM", "start_time": "19:40", "origin": "TOWN KOTHAROAD", "destination": "GOLLALA ENDADA", "duty": "H012"}];
+
+// Realistic Recorded Sample Buses (for Demo/Preview Mode)
+const DEMO_BUSES = [
+  {
+    id: "11112026_A024_12_MADDILAPALEM",
+    plate: "AP02Z0318",
+    tripId: "A024_12_MADDILAPALEM",
+    routeId: "a024-gollala-endada-town-kotharoad",
+    lat: 17.70850,
+    lon: 83.29750,
+    speedKmh: 24,
+    bearing: 200,
+    direction: "forward"
+  },
+  {
+    id: "11112026_A024_4_MADDILAPALEM",
+    plate: "AP39Z0464",
+    tripId: "A024_4_MADDILAPALEM",
+    routeId: "a024-gollala-endada-town-kotharoad",
+    lat: 17.74700,
+    lon: 83.33000,
+    speedKmh: 32,
+    bearing: 195,
+    direction: "forward"
+  },
+  {
+    id: "11112026_H012_5_MADDILAPALEM",
+    plate: "AP31Z0167",
+    tripId: "H012_5_MADDILAPALEM",
+    routeId: "a024-gollala-endada-town-kotharoad",
+    lat: 17.71662,
+    lon: 83.30442,
+    speedKmh: 0,
+    bearing: 26,
+    direction: "backward"
+  },
+  {
+    id: "11112026_A024_13_MADDILAPALEM",
+    plate: "AP02Z0319",
+    tripId: "A024_13_MADDILAPALEM",
+    routeId: "a024-gollala-endada-town-kotharoad",
+    lat: 17.70299,
+    lon: 83.29481,
+    speedKmh: 18,
+    bearing: 28,
+    direction: "backward"
+  }
 ];
 
-// Approximate path coordinates connecting the stops
-const ROUTE_SHAPE = [
-  [17.77629, 83.36794], [17.77484, 83.36561], [17.77093, 83.36371],
-  [17.76408, 83.36105], [17.75971, 83.35334], [17.75526, 83.34369],
-  [17.74952, 83.33418], [17.74623, 83.32851], [17.74088, 83.32398],
-  [17.73607, 83.32060], [17.73012, 83.31420], [17.72354, 83.30751],
-  [17.71650, 83.30450], [17.71079, 83.30205], [17.70798, 83.29731],
-  [17.70228, 83.29459]
-];
-
-// 36 Daily Trips for 52V/G (Duty A024 and H012)
-const TIMETABLE = [
-  { time: "05:00", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "H012-12" },
-  { time: "05:50", origin: "Old Head Post Office", dest: "Gollala Endada", duty: "H012-13" },
-  { time: "05:55", origin: "Maddilapalem", dest: "Gollala Endada", duty: "A024-01" },
-  { time: "06:20", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-02" },
-  { time: "06:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-14" },
-  { time: "07:05", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-03" },
-  { time: "07:40", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-15" },
-  { time: "08:05", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-04" },
-  { time: "08:40", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-16" },
-  { time: "08:55", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-05" },
-  { time: "09:30", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-17" },
-  { time: "09:55", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-06" },
-  { time: "10:20", origin: "Gollala Endada", dest: "Maddilapalem", duty: "H012-18" },
-  { time: "10:45", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-07" },
-  { time: "11:45", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-08" },
-  { time: "12:35", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-09" },
-  { time: "12:45", origin: "Maddilapalem", dest: "Gollala Endada", duty: "H012-01" },
-  { time: "13:15", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-02" },
-  { time: "13:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-10" },
-  { time: "14:10", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-03" },
-  { time: "14:45", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-11" },
-  { time: "15:10", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-04" },
-  { time: "15:45", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-12" },
-  { time: "16:00", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-05" },
-  { time: "16:35", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-13" },
-  { time: "17:00", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-06" },
-  { time: "17:35", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "A024-14" },
-  { time: "17:50", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-07" },
-  { time: "18:25", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "A024-15" },
-  { time: "18:50", origin: "Gollala Endada", dest: "Town Kotharoad", duty: "H012-08" },
-  { time: "19:10", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "A024-16" },
-  { time: "19:40", origin: "Town Kotharoad", dest: "Gollala Endada", duty: "H012-09" },
-  { time: "20:00", origin: "Old Head Post Office", dest: "Sagarnagar", duty: "A024-17" },
-  { time: "20:40", origin: "Sagarnagar", dest: "Maddilapalem", duty: "A024-18" },
-  { time: "20:40", origin: "Gollala Endada", dest: "Old Head Post Office", duty: "H012-10" },
-  { time: "21:30", origin: "Old Head Post Office", dest: "Gollala Endada", duty: "H012-11" }
-];
-
-// --- Application State ---
+// --- App State ---
 let map;
-let routeLine;
+let forwardPolyline;
+let backwardPolyline;
 let busMarkers = {};
 let stopMarkers = [];
 let userMarker = null;
+
+let currentTab = 'forward'; // 'forward' (From -> To) or 'backward' (To -> From)
 let activeBuses = [];
+let forwardBuses = [];
+let backwardBuses = [];
+
+let isDemoMode = false;
 let countdown = 15;
 let timerInterval = null;
 let selectedAlertStop = null;
 let hasAlertTriggered = false;
 
-// --- Initialize Map ---
-function initMap() {
-  map = L.map('map', {
-    zoomControl: false,
-    attributionControl: false
-  }).setView([17.73607, 83.32060], 13); // Centered on Maddilapalem
-
-  // Basemaps (100% Free & Open - Zero API Key Required)
-  const osmStandard = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  });
-
-  const esriStreets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19,
-    attribution: 'Tiles &copy; Esri'
-  });
-
-  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19,
-    attribution: 'Tiles &copy; Esri'
-  });
-
-  // Default to OpenStreetMap (free, no watermark)
-  osmStandard.addTo(map);
-
-  // Layer Switcher Control
-  L.control.layers({
-    "OpenStreetMap (Free)": osmStandard,
-    "Street Map (Esri)": esriStreets,
-    "Satellite View": esriSatellite
-  }, null, { position: 'topright' }).addTo(map);
-
-  L.control.zoom({ position: 'topright' }).addTo(map);
-
-  // Draw Route Polyline
-  routeLine = L.polyline(ROUTE_SHAPE, {
-    color: '#2563eb',
-    weight: 5,
-    opacity: 0.85,
-    lineJoin: 'round',
-    dashArray: '1, 0'
-  }).addTo(map);
-
-  // Add Bus Stops
-  STOPS.forEach(stop => {
-    const isTerminal = stop.terminal;
-    const dotClass = isTerminal ? 'terminal-dot' : 'stop-dot';
-    const stopIcon = L.divIcon({
-      className: 'stop-marker',
-      html: `<div class="${dotClass}" title="${stop.name}"></div>`,
-      iconSize: [isTerminal ? 14 : 10, isTerminal ? 14 : 10],
-      iconAnchor: [isTerminal ? 7 : 5, isTerminal ? 7 : 5]
-    });
-
-    const marker = L.marker([stop.lat, stop.lon], { icon: stopIcon }).addTo(map);
-    marker.bindPopup(`
-      <div style="font-size:0.85rem; padding:4px;">
-        <strong style="color:#2563eb;">🚏 ${stop.name}</strong><br>
-        <span style="font-size:0.75rem; color:#64748b;">Stop ID: ${stop.id}</span>
-      </div>
-    `);
-    stopMarkers.push(marker);
-  });
+// --- Haversine Distance (km) ---
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// --- Live Bus Matching Function ---
+// --- Find Nearest Stop and Stop Progress ---
+function evaluateStopProgress(lat, lon, stopsList) {
+  let minD = Infinity;
+  let nearestIndex = 0;
+  
+  stopsList.forEach((s, idx) => {
+    const d = getDistanceKm(lat, lon, s.lat, s.lon);
+    if (d < minD) {
+      minD = d;
+      nearestIndex = idx;
+    }
+  });
+
+  const stopCount = stopsList.length;
+  const nearest = stopsList[nearestIndex];
+  const stopNumber = nearestIndex + 1; // 1-based
+  const remaining = Math.max(0, stopCount - stopNumber);
+  const progressPercent = Math.min(100, Math.max(5, Math.round(((nearestIndex) / (stopCount - 1)) * 100)));
+
+  let nextStop = null;
+  if (nearestIndex < stopCount - 1) {
+    nextStop = stopsList[nearestIndex + 1].name;
+  } else {
+    nextStop = "Terminal Destination";
+  }
+
+  let prevStop = null;
+  if (nearestIndex > 0) {
+    prevStop = stopsList[nearestIndex - 1].name;
+  } else {
+    prevStop = "Origin Terminal";
+  }
+
+  return {
+    nearestStop: nearest,
+    nearestIndex: nearestIndex,
+    stopNumber: stopNumber,
+    totalStops: stopCount,
+    distanceKm: minD,
+    remainingStops: remaining,
+    progressPercent: progressPercent,
+    nextStop: nextStop,
+    prevStop: prevStop
+  };
+}
+
+// --- Direction Resolver ---
+function resolveBusDirection(tripId, routeId, bearing, lat) {
+  // 1. Direct match with trip metadata
+  for (const [key, meta] of Object.entries(TRIP_METADATA)) {
+    if (tripId.includes(key) || key.includes(tripId)) {
+      return meta.direction;
+    }
+  }
+
+  // 2. Check routeId keywords
+  if (routeId) {
+    if (routeId.includes("old-head-post-office-sagarnagar") || routeId.includes("maddilapalem-sagarnagar")) {
+      return "backward";
+    }
+    if (routeId.includes("gollala-endada-town-kotharoad") || routeId.includes("gollala-endada-old-head-post-office")) {
+      return "forward";
+    }
+  }
+
+  // 3. Trip ID duty number heuristics
+  // For A024: Even trip numbers are Forward (A024_2, 4, 6, 8, 10, 12, 14, 16)
+  // Odd trip numbers are Backward (A024_1, 3, 5, 7, 9, 11, 13, 15, 17)
+  const a024Match = tripId.match(/A024_(\d+)/i);
+  if (a024Match) {
+    const num = parseInt(a024Match[1]);
+    return (num % 2 === 0) ? "forward" : "backward";
+  }
+
+  // For H012:
+  const h012Match = tripId.match(/H012_(\d+)/i);
+  if (h012Match) {
+    const num = parseInt(h012Match[1]);
+    const fwdList = [12, 14, 16, 18, 2, 4, 6, 8, 10];
+    return fwdList.includes(num) ? "forward" : "backward";
+  }
+
+  // 4. GPS Bearing (Southbound is Forward, Northbound is Backward)
+  if (bearing !== undefined && bearing !== null && bearing > 0) {
+    if (bearing >= 110 && bearing <= 260) {
+      return "forward";
+    } else {
+      return "backward";
+    }
+  }
+
+  return "forward";
+}
+
+// --- Live Bus Filter ---
 function is52VGBus(entity) {
   const v = entity.vehicle || {};
   const trip = v.trip || {};
@@ -774,39 +1265,227 @@ function is52VGBus(entity) {
   return false;
 }
 
-// --- Haversine Distance (km) ---
-function getDistanceKm(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
+// --- Initialize Map ---
+function initMap() {
+  map = L.map('map', {
+    zoomControl: false,
+    attributionControl: false
+  }).setView([17.73607, 83.32060], 13); // Centered on Maddilapalem
 
-// --- Nearest Stop Finder ---
-function getNearestStop(lat, lon) {
-  let minD = Infinity;
-  let nearest = null;
-  STOPS.forEach(s => {
-    const d = getDistanceKm(lat, lon, s.lat, s.lon);
-    if (d < minD) {
-      minD = d;
-      nearest = s;
-    }
+  const osmStandard = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
   });
-  return { stop: nearest, distance: minD };
+
+  const esriStreets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{x}/{y}', {
+    maxZoom: 19,
+    attribution: 'Tiles &copy; Esri'
+  });
+
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}', {
+    maxZoom: 19,
+    attribution: 'Tiles &copy; Esri'
+  });
+
+  osmStandard.addTo(map);
+
+  L.control.layers({
+    "OpenStreetMap": osmStandard,
+    "Street Map (Esri)": esriStreets,
+    "Satellite View": esriSatellite
+  }, null, { position: 'topright' }).addTo(map);
+
+  L.control.zoom({ position: 'topright' }).addTo(map);
+
+  // Draw Polylines for both directions
+  forwardPolyline = L.polyline(SHAPE_FORWARD, {
+    color: '#3b82f6',
+    weight: 6,
+    opacity: 0.9,
+    lineJoin: 'round'
+  }).addTo(map);
+
+  backwardPolyline = L.polyline(SHAPE_BACKWARD, {
+    color: '#a855f7',
+    weight: 4,
+    opacity: 0.45,
+    lineJoin: 'round',
+    dashArray: '6, 6'
+  }).addTo(map);
+
+  renderStopsOnMap();
 }
 
-// --- Fetch Live Positions & Trip Updates ---
+// --- Render Stops on Map with Directional Sequence Numbers ---
+function renderStopsOnMap() {
+  stopMarkers.forEach(m => map.removeLayer(m));
+  stopMarkers = [];
+
+  const currentStops = currentTab === 'forward' ? STOPS_FORWARD : STOPS_BACKWARD;
+
+  currentStops.forEach((stop, index) => {
+    const seqNum = index + 1;
+    const isTerminal = (index === 0 || index === currentStops.length - 1);
+    const pinColor = isTerminal ? '#ef4444' : (currentTab === 'forward' ? '#3b82f6' : '#a855f7');
+
+    const stopIcon = L.divIcon({
+      className: 'stop-marker',
+      html: `
+        <div style="background:${pinColor}; color:white; width:20px; height:20px; border-radius:50%; border:2px solid white; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; box-shadow:0 2px 6px rgba(0,0,0,0.5);">
+          ${seqNum}
+        </div>
+      `,
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
+    });
+
+    const marker = L.marker([stop.lat, stop.lon], { icon: stopIcon }).addTo(map);
+    marker.bindPopup(`
+      <div style="font-family:'Plus Jakarta Sans',sans-serif; min-width:160px; padding:2px;">
+        <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">
+          Stop ${seqNum} of ${currentStops.length} (${currentTab === 'forward' ? 'From → To' : 'To → From'})
+        </div>
+        <div style="font-size:0.95rem; font-weight:800; color:#2563eb; margin:3px 0;">
+          🚏 ${stop.name}
+        </div>
+        <div style="font-size:0.75rem; color:#64748b;">
+          Scheduled: ${stop.scheduled_time || 'Regular service'}<br>
+          Stop ID: ${stop.id}
+        </div>
+      </div>
+    `);
+    stopMarkers.push(marker);
+  });
+}
+
+// --- Switch Route Tab (From -> To vs To -> From) ---
+function switchRouteTab(tab) {
+  currentTab = tab;
+
+  // Toggle button styling
+  const tabFwd = document.getElementById("tabForward");
+  const tabBwd = document.getElementById("tabBackward");
+  if (tab === 'forward') {
+    tabFwd.classList.add("active");
+    tabBwd.classList.remove("active");
+    document.getElementById("routeCardTitle").textContent = "Gollala Endada ➔ Town Kotharoad";
+    document.getElementById("routeCardDirBadge").textContent = "From → To (Forward)";
+    document.getElementById("routeCardDirBadge").style.color = "#60a5fa";
+    document.getElementById("routeCardSub").textContent = "Via Sagar Nagar, Maddilapalem & Jagadamba Centre";
+    document.getElementById("currentRouteFilterText").textContent = "From → To";
+
+    // Polyline styling
+    if (forwardPolyline) {
+      forwardPolyline.setStyle({ opacity: 0.95, weight: 6, color: '#3b82f6', dashArray: null });
+      forwardPolyline.bringToFront();
+    }
+    if (backwardPolyline) {
+      backwardPolyline.setStyle({ opacity: 0.35, weight: 3, color: '#a855f7', dashArray: '6, 6' });
+    }
+  } else {
+    tabBwd.classList.add("active");
+    tabFwd.classList.remove("active");
+    document.getElementById("routeCardTitle").textContent = "Town Kotharoad ➔ Gollala Endada";
+    document.getElementById("routeCardDirBadge").textContent = "To → From (Return)";
+    document.getElementById("routeCardDirBadge").style.color = "#c084fc";
+    document.getElementById("routeCardSub").textContent = "Via Jagadamba Centre, Maddilapalem & Sagar Nagar";
+    document.getElementById("currentRouteFilterText").textContent = "To → From";
+
+    // Polyline styling
+    if (backwardPolyline) {
+      backwardPolyline.setStyle({ opacity: 0.95, weight: 6, color: '#a855f7', dashArray: null });
+      backwardPolyline.bringToFront();
+    }
+    if (forwardPolyline) {
+      forwardPolyline.setStyle({ opacity: 0.35, weight: 3, color: '#3b82f6', dashArray: '6, 6' });
+    }
+  }
+
+  // Update stops on map & alert dropdown
+  renderStopsOnMap();
+  populateAlertStops();
+  renderStopsTimeline();
+
+  // Render current tab's buses
+  renderBusCards();
+}
+
+// --- Toggle Stops Timeline Accordion ---
+function toggleStopsTimeline() {
+  const container = document.getElementById("stopsTimelineContainer");
+  const chevron = document.getElementById("stopsChevron");
+  container.classList.toggle("open");
+  if (container.classList.contains("open")) {
+    chevron.classList.replace("fa-chevron-down", "fa-chevron-up");
+    renderStopsTimeline();
+  } else {
+    chevron.classList.replace("fa-chevron-up", "fa-chevron-down");
+  }
+}
+
+// --- Render Stops Timeline with Real-Time Bus Indicators ---
+function renderStopsTimeline() {
+  const listEl = document.getElementById("stopTimelineList");
+  const currentStops = currentTab === 'forward' ? STOPS_FORWARD : STOPS_BACKWARD;
+  const currentBuses = currentTab === 'forward' ? forwardBuses : backwardBuses;
+
+  listEl.innerHTML = currentStops.map((stop, idx) => {
+    const seq = idx + 1;
+    const isTerminal = (idx === 0 || idx === currentStops.length - 1);
+    
+    // Check if any bus is currently near this stop (within 1.2 km)
+    const nearbyBus = currentBuses.find(b => b.progress.nearestStop.id === stop.id && b.progress.distanceKm <= 1.2);
+
+    return `
+      <div class="stop-timeline-item ${isTerminal ? 'terminal' : ''} ${nearbyBus ? 'has-bus' : ''}" onclick="zoomToStop(${stop.lat}, ${stop.lon}, '${stop.name}')">
+        <div class="stop-timeline-node">${seq}</div>
+        <div style="flex:1; padding-left:4px;">
+          <strong style="color:${isTerminal ? '#fca5a5' : '#f8fafc'};">${stop.name}</strong>
+          ${isTerminal ? '<span style="font-size:0.65rem; color:#ef4444; margin-left:4px;">[Terminal]</span>' : ''}
+        </div>
+        <div>
+          ${nearbyBus ? `
+            <span class="stop-bus-tag">
+              <i class="fa-solid fa-bus"></i> ${nearbyBus.plate}
+            </span>
+          ` : `
+            <span style="font-size:0.68rem; color:#64748b;">${stop.scheduled_time || ''}</span>
+          `}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function zoomToStop(lat, lon, name) {
+  map.flyTo([lat, lon], 16, { animate: true, duration: 1.0 });
+}
+
+// --- Populate Proximity Alert Dropdown based on active tab ---
+function populateAlertStops() {
+  const select = document.getElementById("alertStopSelect");
+  const currentStops = currentTab === 'forward' ? STOPS_FORWARD : STOPS_BACKWARD;
+  const prevVal = select.value;
+
+  select.innerHTML = '<option value="">Select stop to get arrival sound alert...</option>' +
+    currentStops.map((s, i) => `
+      <option value="${s.id}">Stop ${i + 1}: ${s.name}</option>
+    `).join("");
+
+  if (prevVal) select.value = prevVal;
+}
+
+// --- Fetch Live Data ---
 async function fetchLiveData() {
+  if (isDemoMode) {
+    processAndRenderBuses(DEMO_BUSES, {});
+    return;
+  }
+
   let vpData = null;
   let tuData = null;
 
   try {
-    // Attempt direct fetch (CORS is open on reclaim.city)
     const [vpRes, tuRes] = await Promise.all([
       fetch(VP_FEED_URL, { cache: "no-store" }),
       fetch(TU_FEED_URL, { cache: "no-store" })
@@ -816,16 +1495,16 @@ async function fetchLiveData() {
       tuData = await tuRes.json();
     }
   } catch (err) {
-    console.warn("Direct feed fetch failed, attempting local proxy fallback...", err);
+    console.warn("Direct fetch blocked/failed, trying proxy...", err);
     try {
-      const fallbackRes = await fetch(LOCAL_PROXY_URL);
-      if (fallbackRes.ok) {
-        const fbJson = await fallbackRes.json();
-        vpData = fbJson.vehicle_positions;
-        tuData = fbJson.trip_updates;
+      const proxyRes = await fetch(LOCAL_PROXY_URL);
+      if (proxyRes.ok) {
+        const pj = await proxyRes.json();
+        vpData = pj.vehicle_positions;
+        tuData = pj.trip_updates;
       }
     } catch (e2) {
-      console.error("Local proxy also unreachable:", e2);
+      console.error("Proxy fetch error:", e2);
     }
   }
 
@@ -835,7 +1514,7 @@ async function fetchLiveData() {
     return;
   }
 
-  // Map trip updates
+  // Trip Updates Map
   const tuMap = {};
   if (tuData && tuData.entity) {
     tuData.entity.forEach(e => {
@@ -846,8 +1525,8 @@ async function fetchLiveData() {
     });
   }
 
-  // Filter 52V/G buses
-  const matched = [];
+  // Filter 52V/G raw entities
+  const matchedEntities = [];
   vpData.entity.forEach(entity => {
     if (is52VGBus(entity)) {
       const v = entity.vehicle;
@@ -856,65 +1535,194 @@ async function fetchLiveData() {
       const veh = v.vehicle || {};
       const tripId = trip.tripId || "";
 
-      const lat = pos.latitude;
-      const lon = pos.longitude;
-      const speedKmh = Math.round((pos.speed || 0) * 3.6);
-      const bearing = pos.bearing || 0;
-      const plate = veh.licensePlate || veh.label || "AP-BUS";
-      const { stop: nearestStop, distance: stopDist } = getNearestStop(lat, lon);
-
-      // Predictions from trip updates
-      const tu = tuMap[tripId];
-      let etaStr = "Calculating...";
-      let delaySec = 0;
-      if (tu && tu.stopTimeUpdate && tu.stopTimeUpdate.length > 0) {
-        const nextStu = tu.stopTimeUpdate[0];
-        delaySec = nextStu.arrival ? nextStu.arrival.delay || 0 : 0;
-        if (nextStu.arrival && nextStu.arrival.time) {
-          const arrDate = new Date(parseInt(nextStu.arrival.time) * 1000);
-          etaStr = arrDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-      }
-
-      // Direction
-      let dir = "Towards Town Kotharoad";
-      if (tripId.includes("17_")) dir = "Towards Sagarnagar";
-      else if (trip.routeId && trip.routeId.includes("old-head-post-office")) dir = "Towards OHPO";
-      else if (tripId.includes("1_") || tripId.includes("3_") || tripId.includes("5_") || tripId.includes("7_") || tripId.includes("9_") || tripId.includes("11_") || tripId.includes("13_") || tripId.includes("15_")) {
-        dir = "Towards Gollala Endada";
-      }
-
-      matched.push({
+      matchedEntities.push({
         id: entity.id || tripId,
-        plate: plate,
+        plate: veh.licensePlate || veh.label || "AP-BUS",
         tripId: tripId,
         routeId: trip.routeId || "",
-        lat: lat,
-        lon: lon,
-        speedKmh: speedKmh,
-        bearing: bearing,
-        nearestStop: nearestStop ? nearestStop.name : "En Route",
-        stopDistKm: stopDist.toFixed(2),
-        direction: dir,
-        eta: etaStr,
-        delaySec: delaySec,
+        lat: pos.latitude,
+        lon: pos.longitude,
+        speedKmh: Math.round((pos.speed || 0) * 3.6),
+        bearing: pos.bearing || 0,
         timestamp: v.timestamp
       });
     }
   });
 
-  activeBuses = matched;
-  renderBusesOnMap(matched);
-  renderBusCards(matched);
-  checkProximityAlerts(matched);
-
-  document.getElementById("liveStatusText").textContent = `Live Feed Active (${matched.length} on road)`;
-  document.getElementById("liveStatusText").style.color = "#34d399";
-  document.getElementById("busCountLabel").textContent = matched.length;
-  document.getElementById("mobileBusCount").textContent = matched.length;
+  processAndRenderBuses(matchedEntities, tuMap);
 }
 
-// --- Render Bus Markers on Leaflet ---
+// --- Process Buses, Direction & Stop Location ---
+function processAndRenderBuses(rawList, tuMap) {
+  const processed = [];
+
+  rawList.forEach(b => {
+    const dir = b.direction || resolveBusDirection(b.tripId, b.routeId, b.bearing, b.lat);
+    const stopsList = (dir === 'forward') ? STOPS_FORWARD : STOPS_BACKWARD;
+    const progress = evaluateStopProgress(b.lat, b.lon, stopsList);
+
+    // Trip ETA calculations
+    const tu = tuMap[b.tripId];
+    let etaStr = "Estimating...";
+    let delaySec = 0;
+    if (tu && tu.stopTimeUpdate && tu.stopTimeUpdate.length > 0) {
+      const nextStu = tu.stopTimeUpdate[0];
+      delaySec = nextStu.arrival ? nextStu.arrival.delay || 0 : 0;
+      if (nextStu.arrival && nextStu.arrival.time) {
+        const arrDate = new Date(parseInt(nextStu.arrival.time) * 1000);
+        etaStr = arrDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }
+
+    processed.push({
+      ...b,
+      direction: dir,
+      progress: progress,
+      eta: etaStr,
+      delaySec: delaySec
+    });
+  });
+
+  activeBuses = processed;
+  forwardBuses = processed.filter(b => b.direction === 'forward');
+  backwardBuses = processed.filter(b => b.direction === 'backward');
+
+  // Update counts
+  const totalCount = processed.length;
+  document.getElementById("totalActiveLabel").textContent = `${totalCount} bus${totalCount === 1 ? '' : 'es'} live`;
+  document.getElementById("forwardBusBadge").textContent = `${forwardBuses.length} Available`;
+  document.getElementById("backwardBusBadge").textContent = `${backwardBuses.length} Available`;
+
+  const fPill = document.getElementById("forwardCountPill");
+  const bPill = document.getElementById("backwardCountPill");
+  fPill.className = `tab-bus-count ${forwardBuses.length > 0 ? 'available' : 'none'}`;
+  bPill.className = `tab-bus-count ${backwardBuses.length > 0 ? 'available' : 'none'}`;
+
+  document.getElementById("mobileBusCount").textContent = totalCount;
+  document.getElementById("liveStatusText").textContent = isDemoMode
+    ? `Sample Demo Active (${totalCount} buses)`
+    : `Live Feed Active (${totalCount} on road)`;
+  document.getElementById("liveStatusText").style.color = "#34d399";
+
+  // Render UI
+  renderBusCards();
+  renderBusesOnMap(processed);
+  renderStopsTimeline();
+  checkProximityAlerts(processed);
+}
+
+// --- Render Sidebar Bus Cards for Active Tab ---
+function renderBusCards() {
+  const container = document.getElementById("busList");
+  const currentBuses = (currentTab === 'forward') ? forwardBuses : backwardBuses;
+  const count = currentBuses.length;
+
+  document.getElementById("busCountLabel").textContent = count;
+  document.getElementById("statBusesAvail").textContent = count;
+
+  if (count === 0) {
+    const originName = (currentTab === 'forward') ? "Gollala Endada" : "Town Kotharoad";
+    const destName = (currentTab === 'forward') ? "Town Kotharoad" : "Gollala Endada";
+
+    // Find next departures from timetable for this direction
+    const now = new Date();
+    const currMin = now.getHours() * 60 + now.getMinutes();
+    const nextTrips = TIMETABLE.filter(t => {
+      const [h, m] = t.start_time.split(":").map(Number);
+      const isDir = (currentTab === 'forward') ? (t.origin === 'GOLLALA ENDADA') : (t.destination === 'GOLLALA ENDADA');
+      return isDir && (h * 60 + m >= currMin - 15);
+    }).slice(0, 3);
+
+    container.innerHTML = `
+      <div style="background:rgba(15,23,42,0.45); border:1px dashed var(--border); border-radius:14px; padding:18px; text-align:center;">
+        <i class="fa-solid fa-moon" style="font-size:1.8rem; color:#94a3b8; margin-bottom:10px;"></i>
+        <div style="font-weight:700; font-size:0.9rem; color:#f8fafc;">
+          No buses broadcasting on this leg right now
+        </div>
+        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px; line-height:1.4;">
+          ${originName} ➔ ${destName} runs 18 trips daily (05:00 AM – 10:30 PM).
+        </div>
+        ${nextTrips.length > 0 ? `
+          <div style="margin-top:12px; text-align:left; background:rgba(255,255,255,0.04); border-radius:8px; padding:8px 12px;">
+            <div style="font-size:0.7rem; font-weight:700; color:#60a5fa; text-transform:uppercase; margin-bottom:6px;">
+              Upcoming Scheduled Departures:
+            </div>
+            ${nextTrips.map(t => `
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; padding:3px 0; color:#cbd5e1;">
+                <span><strong>${t.start_time}</strong> — ${t.code}</span>
+                <span style="color:#94a3b8;">${t.origin}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : ''}
+        <button class="btn-action" style="margin-top:12px; width:100%;" onclick="toggleDemoMode()">
+          <i class="fa-solid fa-flask"></i> Preview with Sample Buses
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = currentBuses.map(b => {
+    const p = b.progress;
+    const isHalted = (b.speedKmh === 0);
+    const originLabel = (currentTab === 'forward') ? "Gollala Endada" : "Town Kotharoad";
+    const destLabel = (currentTab === 'forward') ? "Town Kotharoad" : "Gollala Endada";
+
+    return `
+      <div class="bus-card" onclick="focusBus('${b.id}', ${b.lat}, ${b.lon})">
+        <div class="bus-card-header">
+          <div class="bus-plate">
+            <i class="fa-solid fa-bus-simple"></i> ${b.plate}
+          </div>
+          <div class="bus-speed ${isHalted ? 'halted' : ''}">
+            <i class="fa-solid ${isHalted ? 'fa-pause' : 'fa-gauge-high'}"></i>
+            ${isHalted ? 'Halted / Stop' : b.speedKmh + ' km/h'}
+          </div>
+        </div>
+
+        <!-- Where it is Currently -->
+        <div class="bus-current-location">
+          <div class="bus-current-title">
+            <i class="fa-solid fa-location-dot" style="color:#60a5fa;"></i>
+            <span>Currently near: <strong>${p.nearestStop.name}</strong></span>
+          </div>
+          <div class="bus-current-sub">
+            <span>Stop ${p.stopNumber} of ${p.totalStops} (${p.distanceKm.toFixed(2)} km away)</span>
+            <span style="color:#34d399; font-weight:700;">${p.remainingStops} stops left</span>
+          </div>
+        </div>
+
+        <!-- Visual Step Progression Bar -->
+        <div class="bus-progress-wrap">
+          <div class="bus-progress-labels">
+            <span>${originLabel}</span>
+            <span>Next: <strong>${p.nextStop}</strong></span>
+            <span>${destLabel}</span>
+          </div>
+          <div class="bus-progress-bar-bg">
+            <div class="bus-progress-bar-fill" style="width: ${p.progressPercent}%;"></div>
+            <div class="bus-progress-pin" style="left: ${p.progressPercent}%;">
+              <i class="fa-solid fa-bus"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="bus-detail-row">
+          <i class="fa-solid fa-clock"></i>
+          <span>ETA to Next Stop: <strong>${b.eta}</strong></span>
+        </div>
+        <div class="bus-detail-row">
+          <i class="fa-solid fa-id-badge"></i>
+          <span>Duty / Trip: <strong>${b.tripId || '52V/G Regular'}</strong></span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// --- Render Markers on Map ---
 function renderBusesOnMap(buses) {
   const currentIds = new Set(buses.map(b => b.id));
 
@@ -927,13 +1735,14 @@ function renderBusesOnMap(buses) {
   });
 
   buses.forEach(b => {
+    const isForward = (b.direction === 'forward');
     const isMoving = b.speedKmh > 0;
-    const pinColor = isMoving ? "#2563eb" : "#f59e0b";
+    const pinClass = isForward ? 'bus-pin' : 'bus-pin backward-pin';
 
     const customIcon = L.divIcon({
       className: 'bus-marker',
       html: `
-        <div class="bus-pin" style="background:${pinColor};">
+        <div class="${pinClass}">
           <div class="bus-pin-heading" style="transform: rotate(${b.bearing}deg); transform-origin: center bottom;"></div>
           <i class="fa-solid fa-bus"></i>
           <div class="bus-pin-label">${b.plate}</div>
@@ -944,7 +1753,7 @@ function renderBusesOnMap(buses) {
     });
 
     const popupHtml = `
-      <div style="font-family:'Plus Jakarta Sans',sans-serif; min-width:180px; padding:2px;">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif; min-width:200px; padding:2px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <strong style="color:#2563eb; font-size:1rem;">🚌 ${b.plate}</strong>
           <span style="font-size:0.75rem; background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:10px; font-weight:700;">
@@ -952,8 +1761,10 @@ function renderBusesOnMap(buses) {
           </span>
         </div>
         <div style="font-size:0.8rem; color:#475569; line-height:1.5;">
-          <strong>Direction:</strong> ${b.direction}<br>
-          <strong>Nearest:</strong> ${b.nearestStop} (~${b.stopDistKm} km)<br>
+          <strong>Route Leg:</strong> ${isForward ? 'Gollala Endada ➔ Town Kotharoad' : 'Town Kotharoad ➔ Gollala Endada'}<br>
+          <strong>Current Location:</strong> Near ${b.progress.nearestStop.name} (~${b.progress.distanceKm.toFixed(2)} km)<br>
+          <strong>Stop Progress:</strong> Stop ${b.progress.stopNumber} of ${b.progress.totalStops} (${b.progress.remainingStops} left)<br>
+          <strong>Next Stop:</strong> ${b.progress.nextStop}<br>
           <strong>Trip ID:</strong> ${b.tripId}<br>
           <strong>ETA Next Stop:</strong> ${b.eta}
         </div>
@@ -961,12 +1772,10 @@ function renderBusesOnMap(buses) {
     `;
 
     if (busMarkers[b.id]) {
-      // Smooth update existing marker
       busMarkers[b.id].setLatLng([b.lat, b.lon]);
       busMarkers[b.id].setIcon(customIcon);
       busMarkers[b.id].getPopup().setContent(popupHtml);
     } else {
-      // Create new marker
       const marker = L.marker([b.lat, b.lon], { icon: customIcon }).addTo(map);
       marker.bindPopup(popupHtml);
       busMarkers[b.id] = marker;
@@ -974,54 +1783,27 @@ function renderBusesOnMap(buses) {
   });
 }
 
-// --- Render Sidebar Cards ---
-function renderBusCards(buses) {
-  const container = document.getElementById("busList");
-  if (!buses || buses.length === 0) {
-    container.innerHTML = `
-      <div style="background:rgba(15,23,42,0.4); border:1px dashed var(--border); border-radius:12px; padding:20px; text-align:center;">
-        <i class="fa-solid fa-moon" style="font-size:1.8rem; color:#94a3b8; margin-bottom:10px;"></i>
-        <div style="font-weight:700; font-size:0.9rem; color:#f8fafc;">No 52V/G buses on road right now</div>
-        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">
-          Buses operate daily from 05:00 AM to 10:30 PM. Click Timetable above to view scheduled departures.
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = buses.map(b => `
-    <div class="bus-card" onclick="focusBus('${b.id}', ${b.lat}, ${b.lon})">
-      <div class="bus-card-header">
-        <div class="bus-plate">
-          <i class="fa-solid fa-bus-simple"></i> ${b.plate}
-        </div>
-        <div class="bus-speed ${b.speedKmh === 0 ? 'halted' : ''}">
-          <i class="fa-solid ${b.speedKmh === 0 ? 'fa-pause' : 'fa-gauge-high'}"></i>
-          ${b.speedKmh > 0 ? b.speedKmh + ' km/h' : 'Halted'}
-        </div>
-      </div>
-      <div class="bus-detail-row">
-        <i class="fa-solid fa-arrows-turn-to-dots"></i>
-        <span>${b.direction}</span>
-      </div>
-      <div class="bus-detail-row">
-        <i class="fa-solid fa-location-dot"></i>
-        <span>Near <strong>${b.nearestStop}</strong> (~${b.stopDistKm} km)</span>
-      </div>
-      <div class="bus-detail-row">
-        <i class="fa-solid fa-clock"></i>
-        <span>${b.eta !== 'Calculating...' ? 'Arrival: <strong>' + b.eta + '</strong>' : 'Next Stop ETA: Estimating...'}</span>
-      </div>
-    </div>
-  `).join("");
-}
-
 // --- Focus Bus on Map ---
 function focusBus(id, lat, lon) {
   map.flyTo([lat, lon], 16, { animate: true, duration: 1.2 });
   if (busMarkers[id]) {
     setTimeout(() => busMarkers[id].openPopup(), 1200);
+  }
+}
+
+// --- Toggle Demo Mode ---
+function toggleDemoMode() {
+  isDemoMode = !isDemoMode;
+  const btn = document.getElementById("btnDemoMode");
+  const txt = document.getElementById("demoBtnText");
+  if (isDemoMode) {
+    btn.classList.add("demo-active");
+    txt.textContent = "Live Mode";
+    fetchLiveData();
+  } else {
+    btn.classList.remove("demo-active");
+    txt.textContent = "Demo";
+    fetchLiveData();
   }
 }
 
@@ -1037,14 +1819,14 @@ function setupStopAlert() {
     return;
   }
 
-  const stop = STOPS.find(s => s.id === stopId);
+  const currentStops = currentTab === 'forward' ? STOPS_FORWARD : STOPS_BACKWARD;
+  const stop = currentStops.find(s => s.id === stopId);
   if (stop) {
     selectedAlertStop = stop;
     hasAlertTriggered = false;
     msgEl.style.display = "block";
     msgEl.innerHTML = `<i class="fa-solid fa-check"></i> Alert armed for <strong>${stop.name}</strong>!`;
 
-    // Request browser notification permission if available
     if ("Notification" in window && Notification.permission !== "granted") {
       Notification.requestPermission();
     }
@@ -1056,7 +1838,6 @@ function checkProximityAlerts(buses) {
 
   buses.forEach(b => {
     const dist = getDistanceKm(b.lat, b.lon, selectedAlertStop.lat, selectedAlertStop.lon);
-    // If bus is within 1.2 km of chosen stop
     if (dist <= 1.2) {
       hasAlertTriggered = true;
       triggerAlert(b, selectedAlertStop, dist);
@@ -1112,10 +1893,11 @@ function locateUser() {
   });
 }
 
-// --- Fit Full Route ---
+// --- Fit Route on Map ---
 function fitRoute() {
-  if (routeLine) {
-    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+  const targetPolyline = (currentTab === 'forward') ? forwardPolyline : backwardPolyline;
+  if (targetPolyline) {
+    map.fitBounds(targetPolyline.getBounds(), { padding: [50, 50] });
   }
 }
 
@@ -1126,19 +1908,18 @@ function openTimetable() {
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
   container.innerHTML = TIMETABLE.map(t => {
-    const [h, m] = t.time.split(":").map(Number);
+    const [h, m] = t.start_time.split(":").map(Number);
     const tripMinutes = h * 60 + m;
-    const isPast = tripMinutes < currentMinutes - 45;
     const isNearNow = Math.abs(tripMinutes - currentMinutes) <= 30;
 
     return `
       <div class="schedule-item" style="${isNearNow ? 'background:rgba(37,99,235,0.15); border-radius:8px; padding:10px 8px;' : ''}">
-        <div class="schedule-time" style="${isNearNow ? 'color:#34d399;' : ''}">${t.time}</div>
+        <div class="schedule-time" style="${isNearNow ? 'color:#34d399;' : ''}">${t.start_time}</div>
         <div class="schedule-route">
-          <strong>${t.origin}</strong> → ${t.dest}
+          <strong>${t.origin}</strong> → ${t.destination}
           ${isNearNow ? '<span style="font-size:0.68rem; background:#10b981; color:white; padding:2px 6px; border-radius:10px; margin-left:6px;">Current / Active</span>' : ''}
         </div>
-        <div class="schedule-duty">${t.duty}</div>
+        <div class="schedule-duty">${t.code}</div>
       </div>
     `;
   }).join("");
@@ -1180,9 +1961,11 @@ function startAutoRefresh() {
   }, 1000);
 }
 
-// --- Initialize App ---
+// --- App Initialization ---
 window.addEventListener("DOMContentLoaded", () => {
   initMap();
+  populateAlertStops();
+  renderStopsTimeline();
   fetchLiveData();
   startAutoRefresh();
 });

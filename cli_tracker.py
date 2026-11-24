@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 APSRTC 52V/G Live Bus Tracker (CLI)
-Dedicated real-time tracker for Vizag Route 52V/G
-(Gollala Endada <-> Sagarnagar <-> Maddilapalem <-> Jagadamba <-> Town Kotharoad / OHPO)
+Dedicated real-time tracker for Vizag Route 52V/G with 2 Route Directions:
+1) FROM -> TO (Gollala Endada -> Town Kotharoad)
+2) TO -> FROM (Town Kotharoad -> Gollala Endada)
 """
 
 import urllib.request
@@ -16,36 +17,110 @@ from datetime import datetime
 FEED_VP_URL = "https://maps.reclaim.city/apsrtc/rt/vehicle_positions.json"
 FEED_TU_URL = "https://maps.reclaim.city/apsrtc/rt/trip_updates.json"
 
-STOPS = [
-    {"name": "Gollala Endada", "lat": 17.77629, "lon": 83.36794},
-    {"name": "Sagarnagar", "lat": 17.76408, "lon": 83.36105},
-    {"name": "B V K College", "lat": 17.75526, "lon": 83.34369},
-    {"name": "Venkojipalem", "lat": 17.74623, "lon": 83.32851},
-    {"name": "Maddilapalem", "lat": 17.73607, "lon": 83.32060},
-    {"name": "RTC Complex Vsp", "lat": 17.72354, "lon": 83.30751},
-    {"name": "Jagadamba", "lat": 17.71079, "lon": 83.30205},
-    {"name": "Purna Market", "lat": 17.70798, "lon": 83.29731},
-    {"name": "Town Kotharoad", "lat": 17.70228, "lon": 83.29459},
-    {"name": "Old Head Post Office", "lat": 17.67377, "lon": 83.29213}
+STOPS_FORWARD = [
+    {"name": "Gollala Endada", "lat": 17.77629, "lon": 83.36794, "terminal": True},
+    {"name": "Sagarnagar", "lat": 17.76408, "lon": 83.36105, "terminal": False},
+    {"name": "B V K College", "lat": 17.75526, "lon": 83.34369, "terminal": False},
+    {"name": "Venkojipalem", "lat": 17.74623, "lon": 83.32851, "terminal": False},
+    {"name": "Maddilapalem", "lat": 17.73607, "lon": 83.32060, "terminal": False},
+    {"name": "RTC Complex Vsp", "lat": 17.72354, "lon": 83.30751, "terminal": False},
+    {"name": "Jagadamba", "lat": 17.71079, "lon": 83.30205, "terminal": False},
+    {"name": "Purna Market", "lat": 17.70798, "lon": 83.29731, "terminal": False},
+    {"name": "Town Kotharoad", "lat": 17.70228, "lon": 83.29459, "terminal": True}
+]
+
+STOPS_BACKWARD = [
+    {"name": "Town Kotharoad", "lat": 17.70228, "lon": 83.29459, "terminal": True},
+    {"name": "Purna Market", "lat": 17.70798, "lon": 83.29731, "terminal": False},
+    {"name": "Jagadamba", "lat": 17.71079, "lon": 83.30205, "terminal": False},
+    {"name": "RTC Complex Vsp", "lat": 17.72354, "lon": 83.30751, "terminal": False},
+    {"name": "Maddilapalem", "lat": 17.73607, "lon": 83.32060, "terminal": False},
+    {"name": "Venkojipalem", "lat": 17.74623, "lon": 83.32851, "terminal": False},
+    {"name": "B V K College", "lat": 17.75526, "lon": 83.34369, "terminal": False},
+    {"name": "Sagarnagar", "lat": 17.76408, "lon": 83.36105, "terminal": False},
+    {"name": "Gollala Endada", "lat": 17.77629, "lon": 83.36794, "terminal": True}
+]
+
+DEMO_BUSES = [
+    {
+        "plate": "AP02Z0318",
+        "trip_id": "A024_12_MADDILAPALEM",
+        "lat": 17.7085,
+        "lon": 83.2975,
+        "speed_kmh": 24.0,
+        "bearing": 200.0,
+        "time": "12:45:00",
+        "direction_key": "forward",
+        "eta_info": "Next ETA: ~3 mins (+0s)",
+        "delay_sec": 0
+    },
+    {
+        "plate": "AP31Z0167",
+        "trip_id": "H012_5_MADDILAPALEM",
+        "lat": 17.71662,
+        "lon": 83.30442,
+        "speed_kmh": 0.0,
+        "bearing": 26.6,
+        "time": "12:45:10",
+        "direction_key": "backward",
+        "eta_info": "Next ETA: ~5 mins (+0s)",
+        "delay_sec": 0
+    }
 ]
 
 def haversine_km(lat1, lon1, lat2, lon2):
-    R = 6371.0 # Earth radius in km
+    R = 6371.0
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
     a = math.sin(dlat / 2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2)**2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return R * c
 
-def find_nearest_stop(lat, lon):
+def evaluate_stops_progress(lat, lon, stops_list):
     best_dist = float("inf")
-    best_stop = None
-    for s in STOPS:
+    best_idx = 0
+    for idx, s in enumerate(stops_list):
         d = haversine_km(lat, lon, s["lat"], s["lon"])
         if d < best_dist:
             best_dist = d
-            best_stop = s
-    return best_stop, best_dist
+            best_idx = idx
+
+    stop_num = best_idx + 1
+    total = len(stops_list)
+    remaining = max(0, total - stop_num)
+    next_stop = stops_list[best_idx + 1]["name"] if best_idx < total - 1 else "Destination Terminal"
+    
+    return {
+        "nearest_stop": stops_list[best_idx]["name"],
+        "stop_num": stop_num,
+        "total_stops": total,
+        "dist_km": round(best_dist, 2),
+        "remaining": remaining,
+        "next_stop": next_stop
+    }
+
+def resolve_direction(trip_id, route_id, bearing):
+    if "old-head-post-office-sagarnagar" in route_id or "maddilapalem-sagarnagar" in route_id:
+        return "backward"
+    if "gollala-endada-town-kotharoad" in route_id or "gollala-endada-old-head-post-office" in route_id:
+        return "forward"
+    
+    # Check A024 trip id
+    import re
+    m_a = re.search(r'A024_(\d+)', trip_id)
+    if m_a:
+        num = int(m_a.group(1))
+        return "forward" if (num % 2 == 0) else "backward"
+
+    m_h = re.search(r'H012_(\d+)', trip_id)
+    if m_h:
+        num = int(m_h.group(1))
+        return "forward" if num in [12, 14, 16, 18, 2, 4, 6, 8, 10] else "backward"
+
+    if bearing and bearing > 0:
+        return "forward" if (110 <= bearing <= 260) else "backward"
+
+    return "forward"
 
 def is_route_52vg(entity):
     vehicle = entity.get("vehicle", {})
@@ -53,7 +128,6 @@ def is_route_52vg(entity):
     trip_id = trip.get("tripId", "")
     route_id = trip.get("routeId", "")
 
-    # Matches Maddilapalem duty A024 or H012
     if ("A024" in trip_id or "H012" in trip_id) and "MADDILAPALEM" in trip_id:
         return True
     if route_id in [
@@ -82,7 +156,6 @@ def fetch_live_data():
         print(f"\033[91mError fetching live feeds: {e}\033[0m")
         return []
 
-    # Map trip updates by tripId
     tu_map = {}
     for e in tu_data.get("entity", []):
         tu = e.get("tripUpdate", {})
@@ -99,6 +172,7 @@ def fetch_live_data():
             veh_info = v.get("vehicle", {})
 
             trip_id = trip.get("tripId", "")
+            route_id = trip.get("routeId", "")
             lat = pos.get("latitude", 0.0)
             lon = pos.get("longitude", 0.0)
             bearing = pos.get("bearing", 0.0)
@@ -107,11 +181,14 @@ def fetch_live_data():
             ts = int(v.get("timestamp", time.time()))
             dt = datetime.fromtimestamp(ts).strftime("%H:%M:%S")
 
-            nearest_stop, stop_dist = find_nearest_stop(lat, lon)
+            dir_key = resolve_direction(trip_id, route_id, bearing)
+            stops_ref = STOPS_FORWARD if dir_key == "forward" else STOPS_BACKWARD
+            progress = evaluate_stops_progress(lat, lon, stops_ref)
+
             tu = tu_map.get(trip_id, {})
             stu = tu.get("stopTimeUpdate", [])
 
-            next_stop_info = "Calculating..."
+            next_stop_info = "Next ETA: Estimating..."
             delay_sec = 0
             if stu:
                 first_stop = stu[0]
@@ -121,14 +198,6 @@ def fetch_live_data():
                     arr_dt = datetime.fromtimestamp(int(arr_ts)).strftime("%H:%M:%S")
                     next_stop_info = f"Next ETA: {arr_dt} ({delay_sec:+d}s)"
 
-            # Direction heuristic
-            route_id = trip.get("routeId", "")
-            direction = "Towards Town Kotharoad" if "town-kotharoad" in route_id else "Towards Endada / Sagar Nagar"
-            if "17_" in trip_id:
-                direction = "Towards Sagarnagar"
-            elif "16_" in trip_id:
-                direction = "Towards OHPO"
-
             buses.append({
                 "plate": veh_info.get("licensePlate", veh_info.get("label", "Unknown")),
                 "trip_id": trip_id,
@@ -137,51 +206,94 @@ def fetch_live_data():
                 "speed_kmh": speed_kmh,
                 "bearing": bearing,
                 "time": dt,
-                "nearest_stop": nearest_stop["name"] if nearest_stop else "Unknown",
-                "stop_dist_km": round(stop_dist, 2),
-                "direction": direction,
+                "direction_key": dir_key,
+                "progress": progress,
                 "eta_info": next_stop_info,
                 "delay_sec": delay_sec
             })
 
     return buses
 
-def print_dashboard(buses):
-    print("\033[2J\033[H", end="") # clear screen
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print("\033[1;36m" + "="*70 + "\033[0m")
-    print(f"\033[1;32m  🚌  APSRTC ROUTE 52V/G LIVE BUS TRACKER  —  {now}\033[0m")
-    print(f"\033[1;33m  Corridor: Gollala Endada ⇌ Sagarnagar ⇌ Maddilapalem ⇌ Town Kotharoad\033[0m")
-    print("\033[1;36m" + "="*70 + "\033[0m\n")
+def print_route_section(title, subtitle, stops_list, buses, color_code):
+    print(f"\n{color_code}{'='*72}\033[0m")
+    print(f"{color_code}  {title}\033[0m")
+    print(f"  \033[90m{subtitle} • Total Stops: {len(stops_list)} stops (~16.2 km)\033[0m")
+    print(f"{color_code}{'='*72}\033[0m")
 
     if not buses:
-        print("\033[93m  ⚠️  No 52V/G buses currently broadcasting GPS on the road.\033[0m")
-        print("  (Buses usually run from 05:00 AM to 10:30 PM daily)\n")
+        print("  \033[90mNo active buses currently reporting in this direction.\033[0m")
         return
 
-    print(f"  \033[1;37mActive buses on Route 52V/G:\033[0m \033[1;32m{len(buses)}\033[0m\n")
-
+    print(f"  \033[1;32mAvailable Buses: {len(buses)}\033[0m\n")
     for i, b in enumerate(buses, 1):
+        p = b["progress"]
         status_color = "\033[1;32m" if b["speed_kmh"] > 0 else "\033[1;33m"
-        state = f"Moving ({b['speed_kmh']} km/h)" if b["speed_kmh"] > 0 else "Halted / Bus Stop"
-        print(f"\033[1;37m[{i}] Bus Number:\033[0m \033[1;34m{b['plate']}\033[0m  |  \033[1;37mDuty/Trip:\033[0m {b['trip_id']}")
-        print(f"    Status:      {status_color}{state}\033[0m (Heading: {b['bearing']}°)")
-        print(f"    Direction:   \033[1;35m{b['direction']}\033[0m")
-        print(f"    Near Stop:   \033[1;36m{b['nearest_stop']}\033[0m (~{b['stop_dist_km']} km away)")
-        print(f"    Live GPS:    Lat {b['lat']:.5f}, Lon {b['lon']:.5f}  (Updated {b['time']})")
-        print(f"    Predictions: {b['eta_info']}")
-        print("\033[90m" + "-"*70 + "\033[0m")
+        state = f"Moving ({b['speed_kmh']} km/h)" if b["speed_kmh"] > 0 else "Halted / Stop"
+
+        # Text progress bar
+        step = p["stop_num"]
+        total = p["total_stops"]
+        bar_len = 20
+        filled = int((step / total) * bar_len)
+        bar = "─" * filled + "🚌" + "─" * (bar_len - filled)
+
+        print(f"  \033[1;37m[{i}] Bus:\033[0m \033[1;34m{b['plate']}\033[0m  |  \033[1;37mTrip:\033[0m {b['trip_id']}")
+        print(f"      Status:           {status_color}{state}\033[0m (Bearing: {b['bearing']}°)")
+        print(f"      Current Location: \033[1;36mNear {p['nearest_stop']}\033[0m (~{p['dist_km']} km away)")
+        print(f"      Stop Progress:    Stop \033[1;33m{p['stop_num']}\033[0m of \033[1;33m{total}\033[0m  •  Next: \033[1;32m{p['next_stop']}\033[0m ({p['remaining']} stops left)")
+        print(f"      Route Progress:   [{stops_list[0]['name']}] {bar} [{stops_list[-1]['name']}]")
+        print(f"      Live GPS:         Lat {b['lat']:.5f}, Lon {b['lon']:.5f} (Updated: {b['time']})")
+        print(f"      Prediction:       {b['eta_info']}")
+        print("  \033[90m" + "-"*68 + "\033[0m")
+
+def print_dashboard(buses):
+    print("\033[2J\033[H", end="")
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print("\033[1;36m" + "#"*72 + "\033[0m")
+    print(f"\033[1;37m  🚌  APSRTC 52V/G REAL-TIME BUS TRACKER — {now}\033[0m")
+    print(f"      \033[1;33mTotal Active Buses on Network: {len(buses)}\033[0m")
+    print("\033[1;36m" + "#"*72 + "\033[0m")
+
+    forward_buses = [b for b in buses if b.get("direction_key") == "forward"]
+    backward_buses = [b for b in buses if b.get("direction_key") == "backward"]
+
+    # 1. Route Tab 1: From -> To
+    print_route_section(
+        "➡️  ROUTE TAB 1 [FROM ➔ TO]: Gollala Endada ➔ Town Kotharoad",
+        "Via Sagar Nagar, Maddilapalem & Jagadamba",
+        STOPS_FORWARD,
+        forward_buses,
+        "\033[1;34m"
+    )
+
+    # 2. Route Tab 2: To -> From
+    print_route_section(
+        "⬅️  ROUTE TAB 2 [TO ➔ FROM]: Town Kotharoad ➔ Gollala Endada",
+        "Via Jagadamba, Maddilapalem & Sagar Nagar",
+        STOPS_BACKWARD,
+        backward_buses,
+        "\033[1;35m"
+    )
 
 def main():
     parser = argparse.ArgumentParser(description="Live Tracker for APSRTC Route 52V/G")
     parser.add_argument("--once", action="store_true", help="Print live positions once and exit")
+    parser.add_argument("--demo", action="store_true", help="Run with simulated demo buses")
     parser.add_argument("--interval", type=int, default=15, help="Refresh interval in seconds (default: 15)")
     args = parser.parse_args()
 
     while True:
-        buses = fetch_live_data()
+        if args.demo:
+            buses = []
+            for db in DEMO_BUSES:
+                stops_ref = STOPS_FORWARD if db["direction_key"] == "forward" else STOPS_BACKWARD
+                p = evaluate_stops_progress(db["lat"], db["lon"], stops_ref)
+                buses.append({**db, "progress": p})
+        else:
+            buses = fetch_live_data()
+
         print_dashboard(buses)
-        if args.once:
+        if args.once or args.demo:
             break
         print(f"\n  Auto-refreshing in {args.interval}s... Press Ctrl+C to exit.")
         try:
