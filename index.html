@@ -835,14 +835,9 @@
         <span class="badge-route">
           <i class="fa-solid fa-bus"></i> APSRTC 52V/G
         </span>
-        <div style="display: flex; gap: 6px;">
-          <button class="btn-action" style="flex: none; padding: 5px 8px;" id="btnDemoMode" onclick="toggleDemoMode()" title="Toggle Sample Live Buses">
-            <i class="fa-solid fa-flask"></i> <span id="demoBtnText" style="font-size:0.7rem;">Demo</span>
-          </button>
-          <button class="btn-action" style="flex: none; padding: 5px 9px;" onclick="refreshData(true)" title="Manual Refresh">
-            <i class="fa-solid fa-rotate" id="refreshIcon"></i>
-          </button>
-        </div>
+        <button class="btn-action" style="flex: none; padding: 6px 10px;" onclick="refreshData(true)" title="Manual Refresh">
+          <i class="fa-solid fa-rotate" id="refreshIcon"></i>
+        </button>
       </div>
       <div class="route-subtitle">
         <strong>Gollala Endada ⇌ Town Kotharoad / OHPO</strong><br>
@@ -1658,9 +1653,7 @@ function renderOverviewBusCards() {
         <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">
           Buses operate daily from 05:00 AM to 10:30 PM. Click Timetable above to view scheduled departures.
         </div>
-        <button class="btn-action" style="margin-top:12px; width:100%;" onclick="toggleDemoMode()">
-          <i class="fa-solid fa-flask"></i> Preview with Sample Buses
-        </button>
+
       </div>
     `;
     return;
@@ -1872,15 +1865,16 @@ function toggleDemoMode() {
   isDemoMode = !isDemoMode;
   const btn = document.getElementById("btnDemoMode");
   const txt = document.getElementById("demoBtnText");
-  if (isDemoMode) {
-    btn.classList.add("demo-active");
-    txt.textContent = "Live Mode";
-    fetchLiveData();
-  } else {
-    btn.classList.remove("demo-active");
-    txt.textContent = "Demo";
-    fetchLiveData();
+  if (btn && txt) {
+    if (isDemoMode) {
+      btn.classList.add("demo-active");
+      txt.textContent = "Live Mode";
+    } else {
+      btn.classList.remove("demo-active");
+      txt.textContent = "Demo";
+    }
   }
+  fetchLiveData();
 }
 
 // --- Proximity Stop Alert ---
